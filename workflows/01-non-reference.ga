@@ -1,0 +1,1698 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Updated DEMO:Updated: Generating non-reference protein database for FragPipe discovery",
+    "comments": [],
+    "creator": [
+        {
+            "class": "Organization",
+            "name": "GalaxyP"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "CC-BY-4.0",
+    "name": "iPepGen-NonReference-DBgen_Workflow",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "Human reference genome\n#!genome-build GRCh38.p13\n#!genome-version GRCh38\n#!genome-date 2013-12\n#!genome-build-accession GCA_000001405.28\n#!genebuild-last-updated 2021-11",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Human reference genome\n#!genome-build GRCh38.p13\n#!genome-version GRCh38\n#!genome-date 2013-12\n#!genome-build-accession GCA_000001405.28\n#!genebuild-last-updated 2021-11",
+                    "name": "Homo_sapiens.GRCh38_canon.106.gtf"
+                }
+            ],
+            "label": "Homo_sapiens.GRCh38_canon.106.gtf",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 295.5937262204385,
+                "top": 141.17708455680213
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "c0c8bf09-e68d-479c-805b-c8d68806ed79",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "Second data set of RNA-seq data",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Second data set of RNA-seq data",
+                    "name": "RNA-Seq_Reads_2.fastq"
+                }
+            ],
+            "label": "RNA-Seq_Reads_2.fastq",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 0,
+                "top": 643.0000389659879
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "ae257374-bf45-45f8-9f27-b193a8f1fce2",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "First data set of RNA-seq data",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "First data set of RNA-seq data",
+                    "name": "RNA-Seq_Reads_1.fastq"
+                }
+            ],
+            "label": "RNA-Seq_Reads_1.fastq",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 0,
+                "top": 817.0000135778079
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "aebe09c6-1fa5-4a47-99d6-736d16f8b4f7",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "HUMAN Uniprot+isoforms and cRAP FASTA database",
+            "content_id": null,
+            "errors": null,
+            "id": 3,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "HUMAN Uniprot+isoforms and cRAP FASTA database",
+                    "name": "HUMAN-Uniprot-and-isoforms_and_cRAP-FASTA-Database"
+                }
+            ],
+            "label": "HUMAN-Uniprot-and-isoforms_and_cRAP-FASTA-Database",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 1864.13671875,
+                "top": 1158.3584054687494
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "11ddba5c-a12c-4d81-a7be-aa79c7584a1c",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "Uncompressed_RNA_Seq_Reads_2",
+            "content_id": "CONVERTER_gz_to_uncompressed",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input1": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Uncompressed_RNA_Seq_Reads_2",
+            "name": "Convert gz compressed file to uncompressed.",
+            "outputs": [
+                {
+                    "name": "output1",
+                    "type": "auto"
+                }
+            ],
+            "position": {
+                "left": 279.99996837320856,
+                "top": 617.0000266110596
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput1": {
+                    "action_arguments": {
+                        "newtype": "fastqsanger"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output1"
+                },
+                "RenameDatasetActionoutput1": {
+                    "action_arguments": {
+                        "newname": "Uncompressed_RNA_Seq_Reads_2"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output1"
+                }
+            },
+            "tool_id": "CONVERTER_gz_to_uncompressed",
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "7bbcc0a8-cbea-4b68-969b-19a6bcaf4ed4",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Uncompressed_RNA_Seq_Reads_2",
+                    "output_name": "output1",
+                    "uuid": "712f947e-d2d8-4a6c-bdc0-1c3b32eeba70"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "Uncompressed_RNA_Seq_Reads_1",
+            "content_id": "CONVERTER_gz_to_uncompressed",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input1": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Uncompressed_RNA_Seq_Reads_1",
+            "name": "Convert gz compressed file to uncompressed.",
+            "outputs": [
+                {
+                    "name": "output1",
+                    "type": "auto"
+                }
+            ],
+            "position": {
+                "left": 280.00001854910533,
+                "top": 805.7343874460303
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput1": {
+                    "action_arguments": {
+                        "newtype": "fastqsanger"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output1"
+                },
+                "RenameDatasetActionoutput1": {
+                    "action_arguments": {
+                        "newname": "Uncompressed_RNA_Seq_Reads_1"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output1"
+                }
+            },
+            "tool_id": "CONVERTER_gz_to_uncompressed",
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "ca1111c9-8ab5-4811-ba91-29000b04d137",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Uncompressed_RNA_Seq_Reads_1",
+                    "output_name": "output1",
+                    "uuid": "e8f6f421-9db5-44b8-aa91-3b5173dd654c"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "HISAT2_Alignment_BAM",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/hisat2/hisat2/2.2.1+galaxy1",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "library|input_1": {
+                    "id": 5,
+                    "output_name": "output1"
+                },
+                "library|input_2": {
+                    "id": 4,
+                    "output_name": "output1"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool HISAT2",
+                    "name": "library"
+                },
+                {
+                    "description": "runtime parameter for tool HISAT2",
+                    "name": "library"
+                }
+            ],
+            "label": "HISAT2_Alignment_BAM",
+            "name": "HISAT2",
+            "outputs": [
+                {
+                    "name": "output_alignments",
+                    "type": "bam"
+                }
+            ],
+            "position": {
+                "left": 559.9999869223138,
+                "top": 639.1146182283327
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput_alignments": {
+                    "action_arguments": {
+                        "newname": "HISAT2_Alignment_BAM"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_alignments"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/hisat2/hisat2/2.2.1+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "f4af63aaf57a",
+                "name": "hisat2",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"adv\": {\"input_options\": {\"input_options_selector\": \"defaults\", \"__current_case__\": 0}, \"alignment_options\": {\"alignment_options_selector\": \"defaults\", \"__current_case__\": 0}, \"scoring_options\": {\"scoring_options_selector\": \"defaults\", \"__current_case__\": 0}, \"spliced_options\": {\"spliced_options_selector\": \"defaults\", \"__current_case__\": 0}, \"reporting_options\": {\"reporting_options_selector\": \"defaults\", \"__current_case__\": 0}, \"output_options\": {\"output_options_selector\": \"defaults\", \"__current_case__\": 0}, \"sam_options\": {\"sam_options_selector\": \"defaults\", \"__current_case__\": 0}, \"other_options\": {\"other_options_selector\": \"defaults\", \"__current_case__\": 0}}, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/?.len\", \"library\": {\"type\": \"paired\", \"__current_case__\": 1, \"input_1\": {\"__class__\": \"ConnectedValue\"}, \"input_2\": {\"__class__\": \"ConnectedValue\"}, \"rna_strandness\": \"\", \"paired_options\": {\"paired_options_selector\": \"defaults\", \"__current_case__\": 0}}, \"reference_genome\": {\"source\": \"indexed\", \"__current_case__\": 0, \"index\": \"hg38\"}, \"sum\": {\"new_summary\": false, \"summary_file\": false}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "2.2.1+galaxy1",
+            "type": "tool",
+            "uuid": "4a0aea8e-1a98-4e3f-a055-2528d0ff687a",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "HISAT2_Alignment_BAM",
+                    "output_name": "output_alignments",
+                    "uuid": "aaad5472-f990-431e-9b77-9cf492c90aca"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "StringTie_Alignment_GTF",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/stringtie/stringtie/2.2.3+galaxy0",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "guide|guide_source|ref_hist": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "input_options|input_bam": {
+                    "id": 6,
+                    "output_name": "output_alignments"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool StringTie",
+                    "name": "input_options"
+                }
+            ],
+            "label": "StringTie_Alignment_GTF",
+            "name": "StringTie",
+            "outputs": [
+                {
+                    "name": "output_gtf",
+                    "type": "gtf"
+                }
+            ],
+            "position": {
+                "left": 839.9999853865352,
+                "top": 65
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput_gtf": {
+                    "action_arguments": {
+                        "newname": "StringTie_Alignment_GTF"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_gtf"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/stringtie/stringtie/2.2.3+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "cbf488da3b2c",
+                "name": "stringtie",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"adv\": {\"abundance_estimation\": false, \"omit_sequences\": \"\", \"name_prefix\": null, \"fraction\": \"0.01\", \"min_tlen\": \"200\", \"min_anchor_len\": \"10\", \"min_anchor_cov\": \"1\", \"min_bundle_cov\": \"1\", \"bdist\": \"50\", \"bundle_fraction\": \"1.0\", \"disable_trimming\": false, \"multi_mapping\": false, \"point_features\": null}, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"guide\": {\"use_guide\": \"yes\", \"__current_case__\": 1, \"guide_source\": {\"guide_gff_select\": \"history\", \"__current_case__\": 1, \"ref_hist\": {\"__class__\": \"ConnectedValue\"}}, \"input_estimation\": false, \"special_outputs\": {\"special_outputs_select\": \"no\", \"__current_case__\": 2}, \"coverage_file\": false}, \"input_options\": {\"input_mode\": \"short_reads\", \"__current_case__\": 0, \"input_bam\": {\"__class__\": \"ConnectedValue\"}}, \"rna_strandness\": \"\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "2.2.3+galaxy0",
+            "type": "tool",
+            "uuid": "4e4eb508-e8b2-4293-ab53-43558a24b995",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "StringTie_Alignment_GTF",
+                    "output_name": "output_gtf",
+                    "uuid": "c504da7e-7737-412f-98ed-01426c7a9e0d"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "FreeBayes_variants_VCF",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/freebayes/freebayes/1.3.6+galaxy0",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "reference_source|batchmode|input_bams": {
+                    "id": 6,
+                    "output_name": "output_alignments"
+                }
+            },
+            "inputs": [],
+            "label": "FreeBayes_variants_VCF",
+            "name": "FreeBayes",
+            "outputs": [
+                {
+                    "name": "output_vcf",
+                    "type": "vcf"
+                }
+            ],
+            "position": {
+                "left": 839.9999853865352,
+                "top": 773
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput_vcf": {
+                    "action_arguments": {
+                        "newname": "FreeBayes_variants_VCF"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_vcf"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/freebayes/freebayes/1.3.6+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "a5937157062f",
+                "name": "freebayes",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"bam\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"coverage_options\": {\"coverage_options_selector\": \"do_not_set\", \"__current_case__\": 1}, \"options_type\": {\"options_type_selector\": \"simple\", \"__current_case__\": 1}, \"reference_source\": {\"reference_source_selector\": \"cached\", \"__current_case__\": 0, \"batchmode\": {\"processmode\": \"individual\", \"__current_case__\": 0, \"input_bams\": {\"__class__\": \"ConnectedValue\"}}, \"ref_file\": \"hg38\"}, \"target_limit_type\": {\"target_limit_type_selector\": \"do_not_limit\", \"__current_case__\": 0}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.3.6+galaxy0",
+            "type": "tool",
+            "uuid": "88731071-65f0-4ddb-92ca-f12f31be7ab0",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "FreeBayes_variants_VCF",
+                    "output_name": "output_vcf",
+                    "uuid": "d60cf012-c6fa-479f-8f3f-23caa2710a6f"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "GffCompare_Annotated_Transcripts_GTF",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/gffcompare/gffcompare/0.12.6+galaxy0",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "conditional_annotation|ref_source|reference_annotation": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "gffinputs": {
+                    "id": 7,
+                    "output_name": "output_gtf"
+                }
+            },
+            "inputs": [],
+            "label": "GffCompare_Annotated_Transcripts_GTF",
+            "name": "GffCompare",
+            "outputs": [
+                {
+                    "name": "refmap_output_collection",
+                    "type": "input"
+                },
+                {
+                    "name": "tmap_output_collection",
+                    "type": "input"
+                },
+                {
+                    "name": "transcripts_annotated",
+                    "type": "gtf"
+                },
+                {
+                    "name": "transcripts_combined",
+                    "type": "gtf"
+                },
+                {
+                    "name": "refmap_output",
+                    "type": "tabular"
+                },
+                {
+                    "name": "tmap_output",
+                    "type": "tabular"
+                },
+                {
+                    "name": "transcripts_stats",
+                    "type": "txt"
+                },
+                {
+                    "name": "transcripts_loci",
+                    "type": "tabular"
+                },
+                {
+                    "name": "transcripts_tracking",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1119.9999853865352,
+                "top": 0
+            },
+            "post_job_actions": {
+                "RenameDatasetActiontranscripts_annotated": {
+                    "action_arguments": {
+                        "newname": "GffCompare_Annotated_Transcripts_GTF"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "transcripts_annotated"
+                },
+                "RenameDatasetActiontranscripts_combined": {
+                    "action_arguments": {
+                        "newname": "GffCompare combined transcripts"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "transcripts_combined"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/gffcompare/gffcompare/0.12.6+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "3c5e024a18cf",
+                "name": "gffcompare",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"adv_output\": {\"p\": \"TCONS\", \"C\": false, \"A\": false, \"X\": false, \"K\": false}, \"chr_stats\": false, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"conditional_annotation\": {\"selector\": \"yes\", \"__current_case__\": 0, \"ref_source\": {\"selector\": \"history\", \"__current_case__\": 1, \"reference_annotation\": {\"__class__\": \"ConnectedValue\"}}, \"R\": false, \"Q\": false, \"conditional_strict\": {\"selector\": \"\", \"__current_case__\": 0}, \"discard_single_exon\": \"\", \"conditional_duplication\": {\"selector\": \"\", \"__current_case__\": 0}, \"no_merge\": false}, \"gffinputs\": {\"__class__\": \"ConnectedValue\"}, \"max_dist_group\": \"100\", \"refmap_tmap\": true, \"seq_data\": {\"selector\": \"no\", \"__current_case__\": 0}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "0.12.6+galaxy0",
+            "type": "tool",
+            "uuid": "d174e619-beac-4080-87a4-1d16c638b0b7",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "GffCompare_Annotated_Transcripts_GTF",
+                    "output_name": "transcripts_annotated",
+                    "uuid": "97b924f9-aba4-49cb-b00d-656fcdd8d74f"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "CustomProDB to generate protein FASTAs from BAM and VCF files",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/custom_pro_db/custom_pro_db/1.22.0",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "genome_annotation|bamInput": {
+                    "id": 6,
+                    "output_name": "output_alignments"
+                },
+                "genome_annotation|vcfInput": {
+                    "id": 8,
+                    "output_name": "output_vcf"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CustomProDB",
+                    "name": "genome_annotation"
+                },
+                {
+                    "description": "runtime parameter for tool CustomProDB",
+                    "name": "genome_annotation"
+                }
+            ],
+            "label": "CustomProDB_protein_FASTAs_from_BAM_and_VCF",
+            "name": "CustomProDB",
+            "outputs": [
+                {
+                    "name": "output_rpkm",
+                    "type": "fasta"
+                },
+                {
+                    "name": "output_snv",
+                    "type": "fasta"
+                },
+                {
+                    "name": "output_indel",
+                    "type": "fasta"
+                },
+                {
+                    "name": "output_variant_annotation_rdata",
+                    "type": "rdata"
+                },
+                {
+                    "name": "output_genomic_mapping_sqlite",
+                    "type": "sqlite"
+                },
+                {
+                    "name": "output_variant_annotation_sqlite",
+                    "type": "sqlite"
+                }
+            ],
+            "position": {
+                "left": 1119.9999571193289,
+                "top": 654.9010592031063
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput_genomic_mapping_sqlite": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_Genomic_SQLlite"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_genomic_mapping_sqlite"
+                },
+                "RenameDatasetActionoutput_indel": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_INDEL_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_indel"
+                },
+                "RenameDatasetActionoutput_rpkm": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_RPKM_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_rpkm"
+                },
+                "RenameDatasetActionoutput_snv": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_SAV_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_snv"
+                },
+                "RenameDatasetActionoutput_variant_annotation_rdata": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_VARIANT_ANNOTATION_RDATA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_variant_annotation_rdata"
+                },
+                "RenameDatasetActionoutput_variant_annotation_sqlite": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_VARIANT_ANNOTATION_SQLite"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_variant_annotation_sqlite"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/custom_pro_db/custom_pro_db/1.22.0",
+            "tool_shed_repository": {
+                "changeset_revision": "2c7df0077d28",
+                "name": "custom_pro_db",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"bam\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"genome_annotation\": {\"source\": \"builtin\", \"__current_case__\": 0, \"builtin\": \"hg38_GRCh38\", \"bamInput\": {\"__class__\": \"ConnectedValue\"}, \"vcfInput\": {\"__class__\": \"ConnectedValue\"}, \"dbsnpInCoding\": false, \"cosmic\": false}, \"outputIndels\": true, \"outputRData\": true, \"outputSQLite\": true, \"rpkmCutoff\": \"1.0\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.22.0",
+            "type": "tool",
+            "uuid": "6ef48d77-e315-4a61-839d-46eb904a399e",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "CustomProDB_SAV_FASTA",
+                    "output_name": "output_snv",
+                    "uuid": "ef51bb44-8b16-4819-b8e6-70c2636de1c1"
+                },
+                {
+                    "label": "CustomProDB_Genomic_SQLlite",
+                    "output_name": "output_genomic_mapping_sqlite",
+                    "uuid": "4ef346ef-16b6-45fb-b1cd-fe60c24a2eca"
+                },
+                {
+                    "label": "CustomProDB_VARIANT_ANNOTATION_SQLite",
+                    "output_name": "output_variant_annotation_sqlite",
+                    "uuid": "321f1454-7a64-45d1-909d-07c481dde0d0"
+                },
+                {
+                    "label": "CustomProDB_INDEL_FASTA",
+                    "output_name": "output_indel",
+                    "uuid": "2762ffa1-dfc2-418a-bda0-88ece297a2b1"
+                },
+                {
+                    "label": "CustomProDB_RPKM_FASTA",
+                    "output_name": "output_rpkm",
+                    "uuid": "40ed697b-c831-43bb-97f0-189317fa8056"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "GffCompare_Annotated_GTF_to_BED",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/gffcompare_to_bed/gffcompare_to_bed/0.2.1",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "input": {
+                    "id": 9,
+                    "output_name": "transcripts_annotated"
+                }
+            },
+            "inputs": [],
+            "label": "GffCompare_Annotated_GTF_to_BED",
+            "name": "Convert gffCompare annotated GTF to BED",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "bed"
+                }
+            ],
+            "position": {
+                "left": 1404.041627321157,
+                "top": 35.34896313992981
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "GffCompare_Annotated_GTF_to_BED"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/gffcompare_to_bed/gffcompare_to_bed/0.2.1",
+            "tool_shed_repository": {
+                "changeset_revision": "ba5368c19dbd",
+                "name": "gffcompare_to_bed",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"gtf\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"class_codes\": [\"j\", \"e\", \"i\", \"p\", \"u\"], \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "0.2.1",
+            "type": "tool",
+            "uuid": "a6f6b695-0362-491a-882c-07ecd0bdbdd8",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "GffCompare_Annotated_GTF_to_BED",
+                    "output_name": "output",
+                    "uuid": "78cb6267-5791-48b2-8729-41cb8b96adc8"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "Convert_INDEL_FASTA_to_tabular",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input": {
+                    "id": 10,
+                    "output_name": "output_indel"
+                }
+            },
+            "inputs": [],
+            "label": "Convert_INDEL_FASTA_to_tabular",
+            "name": "FASTA-to-Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1420.6484848724413,
+                "top": 559.4370214763564
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_INDEL.tabular"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "e7ed3c310b74",
+                "name": "fasta_to_tabular",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"descr_columns\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"keep_first\": \"0\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "0597afce-b3cf-473f-840c-694a30eed3d0",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "CustomProDB_INDEL.tabular",
+                    "output_name": "output",
+                    "uuid": "14224078-2fa2-49e3-b410-fd6fb2736729"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "Convert-SNV_FASTA_to_tabular",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input": {
+                    "id": 10,
+                    "output_name": "output_snv"
+                }
+            },
+            "inputs": [],
+            "label": "Convert-SAV_FASTA_to_tabular",
+            "name": "FASTA-to-Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1457.079615936057,
+                "top": 757.3711247552578
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_SAV.tabular"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "e7ed3c310b74",
+                "name": "fasta_to_tabular",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"descr_columns\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"keep_first\": \"0\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "f5916b03-1bb9-459a-9a48-64d3fb085413",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "CustomProDB_SAV.tabular",
+                    "output_name": "output",
+                    "uuid": "528d4a6e-a395-4fe4-a0c8-ea649552b4b9"
+                }
+            ]
+        },
+        "14": {
+            "annotation": "Convert-RPKM_FASTA_to_tabular",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "input": {
+                    "id": 10,
+                    "output_name": "output_rpkm"
+                }
+            },
+            "inputs": [],
+            "label": "Convert-RPKM_FASTA_to_tabular",
+            "name": "FASTA-to-Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1434.518489650424,
+                "top": 940.597630620423
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "CustomProDB_RPKM.tabular"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "e7ed3c310b74",
+                "name": "fasta_to_tabular",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"descr_columns\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"keep_first\": \"0\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "1b2106e7-5989-40f8-93cf-38d6163d29ed",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "CustomProDB_RPKM.tabular",
+                    "output_name": "output",
+                    "uuid": "92ad0e9c-95e2-4aca-98bb-3e25f0303243"
+                }
+            ]
+        },
+        "15": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/sqlite_to_tabular/sqlite_to_tabular/2.0.0",
+            "errors": null,
+            "id": 15,
+            "input_connections": {
+                "sqlitedb": {
+                    "id": 10,
+                    "output_name": "output_genomic_mapping_sqlite"
+                }
+            },
+            "inputs": [],
+            "label": "Genomic_sqlite-to-tabular",
+            "name": "SQLite to tabular",
+            "outputs": [
+                {
+                    "name": "query_results",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1532.0169067382812,
+                "top": 1399.0057373046875
+            },
+            "post_job_actions": {
+                "RenameDatasetActionquery_results": {
+                    "action_arguments": {
+                        "newname": "Genomic_sqlite-to-tabular"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "query_results"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/sqlite_to_tabular/sqlite_to_tabular/2.0.0",
+            "tool_shed_repository": {
+                "changeset_revision": "b722161a845a",
+                "name": "sqlite_to_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"query_result\": {\"header\": \"no\", \"__current_case__\": 1}, \"sqlitedb\": {\"__class__\": \"ConnectedValue\"}, \"sqlquery\": \"SELECT pro_name, chr_name, cds_chr_start - 1, cds_chr_end,strand,cds_start - 1, cds_end\\n  FROM genomic_mapping\\n  ORDER BY pro_name, cds_start, cds_end\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "2.0.0",
+            "type": "tool",
+            "uuid": "85d79c25-a551-4a0f-9e22-ba18fbca1058",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "16": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/sqlite_to_tabular/sqlite_to_tabular/2.0.0",
+            "errors": null,
+            "id": 16,
+            "input_connections": {
+                "sqlitedb": {
+                    "id": 10,
+                    "output_name": "output_variant_annotation_sqlite"
+                }
+            },
+            "inputs": [],
+            "label": "Variant_sqlite-to-tabular 2",
+            "name": "SQLite to tabular",
+            "outputs": [
+                {
+                    "name": "query_results",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1525.6675415039062,
+                "top": 1678.0679931640625
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/sqlite_to_tabular/sqlite_to_tabular/2.0.0",
+            "tool_shed_repository": {
+                "changeset_revision": "b722161a845a",
+                "name": "sqlite_to_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"query_result\": {\"header\": \"no\", \"__current_case__\": 1}, \"sqlitedb\": {\"__class__\": \"ConnectedValue\"}, \"sqlquery\": \"SELECT var_pro_name,pro_name,cigar,annotation\\nFROM variant_annotation\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "2.0.0",
+            "type": "tool",
+            "uuid": "40a8c4c4-5404-4c82-b910-48305a631627",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "17": {
+            "annotation": "Translate_BED_Transcripts",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/translate_bed/translate_bed/0.1.0",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "input": {
+                    "id": 11,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Translate_BED_Transcripts",
+            "name": "Translate BED transcripts",
+            "outputs": [
+                {
+                    "name": "translation_bed",
+                    "type": "bed"
+                },
+                {
+                    "name": "translation_fasta",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 1701.9774551941957,
+                "top": 109.15800194287092
+            },
+            "post_job_actions": {
+                "RenameDatasetActiontranslation_bed": {
+                    "action_arguments": {
+                        "newname": "Translate_BED_Transcripts"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "translation_bed"
+                },
+                "RenameDatasetActiontranslation_fasta": {
+                    "action_arguments": {
+                        "newname": "Translation_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "translation_fasta"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/translate_bed/translate_bed/0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "038ecf54cbec",
+                "name": "translate_bed",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"bed\", \"bed_filters\": {\"regions\": \"\", \"biotypes\": \"\"}, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"fa_id\": {\"reference\": \"\", \"fa_db\": \"generic\", \"fa_sep\": \"\", \"id_prefix\": \"\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"ref\": {\"ref_source\": \"cached\", \"__current_case__\": 0, \"ref_loc\": \"hg38\"}, \"translations\": {\"translate\": \"cDNA_minus_CDS\", \"min_length\": \"10\", \"start_codon\": false, \"enzyme\": null}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "2762e608-ed03-40dc-9e86-0fb321ced796",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Translate_BED_Transcripts",
+                    "output_name": "translation_bed",
+                    "uuid": "06f431e3-46f2-43c3-83f8-8a18de44a1f0"
+                },
+                {
+                    "label": "Translation_FASTA",
+                    "output_name": "translation_fasta",
+                    "uuid": "cd0eff06-1ada-4c7e-b61a-b17260043a39"
+                }
+            ]
+        },
+        "18": {
+            "annotation": "Annotating-INDEL",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "errors": null,
+            "id": 18,
+            "input_connections": {
+                "input": {
+                    "id": 12,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Annotating-INDEL",
+            "name": "Column Regex Find And Replace",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 1744.165921757785,
+                "top": 471.8104800587998
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Annotating-INDEL"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "tool_shed_repository": {
+                "changeset_revision": "503bcd6ebe4b",
+                "name": "regex_find_replace",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"checks\": [{\"__index__\": 0, \"pattern\": \"^(ENS[^_]+_\\\\d+:)([ACGTacgt]+)>([ACGTacgt]+)\\\\s*\", \"replacement\": \"\\\\1\\\\2_\\\\3\"}, {\"__index__\": 1, \"pattern\": \",([A-Y]\\\\d+[A-Y]?)\\\\s*\", \"replacement\": \".\\\\1\"}, {\"__index__\": 2, \"pattern\": \"^(ENS[^ |]*)\\\\s*\", \"replacement\": \"\\\\1\"}, {\"__index__\": 3, \"pattern\": \"^(.*)$\", \"replacement\": \"generic|INDEL_\\\\1\"}], \"field\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.3",
+            "type": "tool",
+            "uuid": "3a732785-33f9-47e1-9747-b8c67a48f501",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Annotating-INDEL",
+                    "output_name": "out_file1",
+                    "uuid": "58f0150b-df16-4f10-987e-9748299eb30c"
+                }
+            ]
+        },
+        "19": {
+            "annotation": "Annotating-SNV",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "errors": null,
+            "id": 19,
+            "input_connections": {
+                "input": {
+                    "id": 13,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Column Regex Find And Replace",
+                    "name": "input"
+                }
+            ],
+            "label": "Annotating-SAV",
+            "name": "Column Regex Find And Replace",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 1755.483757353229,
+                "top": 672.0141821581523
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Annotating-SAV"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "tool_shed_repository": {
+                "changeset_revision": "503bcd6ebe4b",
+                "name": "regex_find_replace",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"checks\": [{\"__index__\": 0, \"pattern\": \"^(ENS[^_]+_\\\\d+:)([ACGTacgt]+)>([ACGTacgt]+)\\\\s*\", \"replacement\": \"\\\\1\\\\2_\\\\3\"}, {\"__index__\": 1, \"pattern\": \",([A-Y]\\\\d+[A-Y]?)\\\\s*\", \"replacement\": \".\\\\1\"}, {\"__index__\": 2, \"pattern\": \"^(ENS[^ |]*)\\\\s*\", \"replacement\": \"\\\\1\"}, {\"__index__\": 3, \"pattern\": \"^(.*)$\", \"replacement\": \"generic|SAV_\\\\1\"}], \"field\": \"1\", \"input\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.3",
+            "type": "tool",
+            "uuid": "b4a11bdd-4857-45f8-9669-5a298b8a432c",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Annotating-SAV",
+                    "output_name": "out_file1",
+                    "uuid": "0488db16-84c2-425b-acb1-28c022e5452d"
+                }
+            ]
+        },
+        "20": {
+            "annotation": "Annotating-RPKM",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "errors": null,
+            "id": 20,
+            "input_connections": {
+                "input": {
+                    "id": 14,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Annotating-RPKM",
+            "name": "Column Regex Find And Replace",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 1747.2504570849242,
+                "top": 904.1383817218122
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Annotating-RPKM"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "tool_shed_repository": {
+                "changeset_revision": "503bcd6ebe4b",
+                "name": "regex_find_replace",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"checks\": [{\"__index__\": 0, \"pattern\": \"^(ENS[^_]+_\\\\d+:)([ACGTacgt]+)>([ACGTacgt]+)\\\\s*\", \"replacement\": \"\\\\1\\\\2_\\\\3\"}, {\"__index__\": 1, \"pattern\": \",([A-Y]\\\\d+[A-Y]?)\\\\s*\", \"replacement\": \".\\\\1\"}, {\"__index__\": 2, \"pattern\": \"^(ENS[^ |]*)\\\\s*\", \"replacement\": \"\\\\1\"}, {\"__index__\": 3, \"pattern\": \"^(.*)$\", \"replacement\": \"generic|RPKM_\\\\1\"}], \"field\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.3",
+            "type": "tool",
+            "uuid": "a9e7712c-050c-4b78-ac48-beaf58be8e1e",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Annotating-RPKM",
+                    "output_name": "out_file1",
+                    "uuid": "cd569e6c-daa2-442c-b0b4-fcf775c6b2fd"
+                }
+            ]
+        },
+        "21": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "errors": null,
+            "id": 21,
+            "input_connections": {
+                "input": {
+                    "id": 15,
+                    "output_name": "query_results"
+                }
+            },
+            "inputs": [],
+            "label": "Regexed Genomic sqlite",
+            "name": "Column Regex Find And Replace",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 1831.2356567382812,
+                "top": 1391.2144775390625
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Regexed Genomic sqlite"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "tool_shed_repository": {
+                "changeset_revision": "503bcd6ebe4b",
+                "name": "regex_find_replace",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"checks\": [{\"__index__\": 0, \"pattern\": \"^(ENS[^_]+_\\\\d+:)([ACGTacgt]+)>([ACGTacgt]+)\\\\s*\", \"replacement\": \"\\\\1\\\\2_\\\\3\"}, {\"__index__\": 1, \"pattern\": \",([A-Y]\\\\d+[A-Y]?)\\\\s*\", \"replacement\": \".\\\\1\"}, {\"__index__\": 2, \"pattern\": \"^(ENS[^ |]*)\\\\s*\", \"replacement\": \"\\\\1\"}], \"field\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.3",
+            "type": "tool",
+            "uuid": "e841b6f9-3e53-4558-8414-d3b432835b0f",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "22": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "errors": null,
+            "id": 22,
+            "input_connections": {
+                "input": {
+                    "id": 16,
+                    "output_name": "query_results"
+                }
+            },
+            "inputs": [],
+            "label": "Regexed Variant sqlite",
+            "name": "Column Regex Find And Replace",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 1803.8706665039062,
+                "top": 1676.7755126953125
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Regexed Variant sqlite"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/regex_find_replace/regexColumn1/1.0.3",
+            "tool_shed_repository": {
+                "changeset_revision": "503bcd6ebe4b",
+                "name": "regex_find_replace",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"checks\": [{\"__index__\": 0, \"pattern\": \"^(ENS[^_]+_\\\\d+:)([ACGTacgt]+)>([ACGTacgt]+)\\\\s*\", \"replacement\": \"\\\\1\\\\2_\\\\3\"}, {\"__index__\": 1, \"pattern\": \",([A-Y]\\\\d+[A-Y]?)\\\\s*\", \"replacement\": \".\\\\1\"}, {\"__index__\": 2, \"pattern\": \"^(ENS[^ |]*)\\\\s*\", \"replacement\": \"\\\\1\"}], \"field\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.3",
+            "type": "tool",
+            "uuid": "ababf222-475a-4f19-88d4-88d998c45c58",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "23": {
+            "annotation": "Convert_Translation_BED_to_tabular_for_protein_map",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/bed_to_protein_map/bed_to_protein_map/0.2.0",
+            "errors": null,
+            "id": 23,
+            "input_connections": {
+                "input": {
+                    "id": 17,
+                    "output_name": "translation_bed"
+                }
+            },
+            "inputs": [],
+            "label": "Convert_Translation_BED_to_tabular_for_protein_map",
+            "name": "bed to protein map",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 2032.5777983699852,
+                "top": 50.39739175841538
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Translation_tabular_for_protein_map"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/bed_to_protein_map/bed_to_protein_map/0.2.0",
+            "tool_shed_repository": {
+                "changeset_revision": "a7c58b43cbaa",
+                "name": "bed_to_protein_map",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"bed\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "0.2.0",
+            "type": "tool",
+            "uuid": "efb60420-93d0-417c-be5c-086ed966b945",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Translation_tabular_for_protein_map",
+                    "output_name": "output",
+                    "uuid": "b79218c7-86ba-402a-bb13-7ea335480f76"
+                }
+            ]
+        },
+        "24": {
+            "annotation": "Converting_Annotated_Indel_to_FASTA",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "errors": null,
+            "id": 24,
+            "input_connections": {
+                "input": {
+                    "id": 18,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Converting_Annotated_Indel_to_FASTA",
+            "name": "Tabular-to-FASTA",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 2059.4740430269535,
+                "top": 456.83795132127267
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Converting_Annotated_Indel_to_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "0a7799698fe5",
+                "name": "tabular_to_fasta",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"seq_col\": \"2\", \"title_col\": [\"1\"], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "aae80b63-2c9a-4d87-8cf7-f14411a992df",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Converting_Annotated_Indel_to_FASTA",
+                    "output_name": "output",
+                    "uuid": "13a97cf0-9abb-47f9-9f19-46f0824ee517"
+                }
+            ]
+        },
+        "25": {
+            "annotation": "Converting_Annotated_SAV_to_FASTA",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "errors": null,
+            "id": 25,
+            "input_connections": {
+                "input": {
+                    "id": 19,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Converting_Annotated_SAV_to_FASTA",
+            "name": "Tabular-to-FASTA",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 2060.61819661236,
+                "top": 674.243739086804
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Converting_Annotated_SAV_to_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "0a7799698fe5",
+                "name": "tabular_to_fasta",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"seq_col\": \"2\", \"title_col\": [\"1\"], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "7722c714-8f8b-4095-bfbc-e8020345fd70",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Converting_Annotated_SAV_to_FASTA",
+                    "output_name": "output",
+                    "uuid": "1eb563a1-2f4e-4c2e-a9d8-402ff3f98a64"
+                }
+            ]
+        },
+        "26": {
+            "annotation": "Converting_Annotated_RPKM_to_FASTA",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "errors": null,
+            "id": 26,
+            "input_connections": {
+                "input": {
+                    "id": 20,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Converting_Annotated_RPKM_to_FASTA",
+            "name": "Tabular-to-FASTA",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 2068.54918407678,
+                "top": 937.964350294005
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Converting_Annotated_RPKM_to_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/tabular_to_fasta/tab2fasta/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "0a7799698fe5",
+                "name": "tabular_to_fasta",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"input\", \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"seq_col\": \"2\", \"title_col\": [\"1\"], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "e427b944-8e56-4c6a-b9a1-b7b4fb60d15f",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Converting_Annotated_RPKM_to_FASTA",
+                    "output_name": "output",
+                    "uuid": "e9cb7925-6e1e-43de-8b60-429f243bb1bd"
+                }
+            ]
+        },
+        "27": {
+            "annotation": "",
+            "content_id": "cat1",
+            "errors": null,
+            "id": 27,
+            "input_connections": {
+                "input1": {
+                    "id": 21,
+                    "output_name": "out_file1"
+                },
+                "queries_0|input2": {
+                    "id": 22,
+                    "output_name": "out_file1"
+                },
+                "queries_1|input2": {
+                    "id": 23,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Genomic+Variant+String-tie-Bed file for annotation",
+            "name": "Concatenate multiple datasets or collections",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 2296.8180541992188,
+                "top": 1409.3822021484375
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Genomic+Variant+String-tie-Bed file for annotation"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "cat1",
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"queries\": [{\"__index__\": 0, \"input2\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 1, \"input2\": {\"__class__\": \"ConnectedValue\"}}], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "9dfd588b-e5da-4971-abd0-1e9cbd7601ef",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Genomic+Variant+String-tie-Bed file",
+                    "output_name": "out_file1",
+                    "uuid": "335530ab-af56-4ca5-9ed2-c392f93e9aff"
+                }
+            ]
+        },
+        "28": {
+            "annotation": "Merge_Indel_SAV_RPKM_to_make_No_ref_CustomProDB_FASTA",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/fasta_merge_files_and_filter_unique_sequences/fasta_merge_files_and_filter_unique_sequences/1.2.0",
+            "errors": null,
+            "id": 28,
+            "input_connections": {
+                "batchmode|input_fastas_0|input_fasta": {
+                    "id": 26,
+                    "output_name": "output"
+                },
+                "batchmode|input_fastas_1|input_fasta": {
+                    "id": 25,
+                    "output_name": "output"
+                },
+                "batchmode|input_fastas_2|input_fasta": {
+                    "id": 24,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Merge_Indel_SAV_RPKM_to_make_Non_ref_CustomProDB_FASTA",
+            "name": "FASTA Merge Files and Filter Unique Sequences",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 2544.402941445647,
+                "top": 485.6336806631734
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Non-reference_CustomProDB_FASTA"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/fasta_merge_files_and_filter_unique_sequences/fasta_merge_files_and_filter_unique_sequences/1.2.0",
+            "tool_shed_repository": {
+                "changeset_revision": "f546e7278f04",
+                "name": "fasta_merge_files_and_filter_unique_sequences",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"fasta\", \"accession_parser\": \"^>([^ ]+).*$\", \"batchmode\": {\"processmode\": \"individual\", \"__current_case__\": 0, \"input_fastas\": [{\"__index__\": 0, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 1, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 2, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}]}, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"uniqueness_criterion\": \"sequence\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.2.0",
+            "type": "tool",
+            "uuid": "53b771bf-6a8d-4e22-9c06-d27d7b6a4465",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Non-reference_CustomProDB_FASTA",
+                    "output_name": "output",
+                    "uuid": "9788c6b4-e376-43a6-b096-f2dcf37ef06a"
+                }
+            ]
+        },
+        "29": {
+            "annotation": "Human + crap + Non-reference transcripts dB generation",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/fasta_merge_files_and_filter_unique_sequences/fasta_merge_files_and_filter_unique_sequences/1.2.0",
+            "errors": null,
+            "id": 29,
+            "input_connections": {
+                "batchmode|input_fastas_0|input_fasta": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "batchmode|input_fastas_1|input_fasta": {
+                    "id": 28,
+                    "output_name": "output"
+                },
+                "batchmode|input_fastas_2|input_fasta": {
+                    "id": 17,
+                    "output_name": "translation_fasta"
+                }
+            },
+            "inputs": [],
+            "label": "Human_cRAP_Non_reference_transcripts_dB generation",
+            "name": "FASTA Merge Files and Filter Unique Sequences",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 2492.3154907226562,
+                "top": 866.8677978515625
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Human_cRAP_Non_reference_transcripts_dB generation"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/galaxyp/fasta_merge_files_and_filter_unique_sequences/fasta_merge_files_and_filter_unique_sequences/1.2.0",
+            "tool_shed_repository": {
+                "changeset_revision": "f546e7278f04",
+                "name": "fasta_merge_files_and_filter_unique_sequences",
+                "owner": "galaxyp",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"fasta\", \"accession_parser\": \"^>([^ ]+).*$\", \"batchmode\": {\"processmode\": \"individual\", \"__current_case__\": 0, \"input_fastas\": [{\"__index__\": 0, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 1, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 2, \"input_fasta\": {\"__class__\": \"ConnectedValue\"}}]}, \"chromInfo\": \"/opt/galaxy/tool-data/shared/ucsc/chrom/hg38.len\", \"uniqueness_criterion\": \"sequence\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.2.0",
+            "type": "tool",
+            "uuid": "3e2caef4-860f-4542-8e8d-1a71b98f76d8",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Human_cRAP_Non_reference_transcripts_dB generation",
+                    "output_name": "output",
+                    "uuid": "e5bb1d8f-d3f3-4316-b758-804120a55df5"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "name:neoantigen"
+    ],
+    "uuid": "27ff2ba5-29f9-4a9d-b781-11257dfe2fd5",
+    "version": 13
+}

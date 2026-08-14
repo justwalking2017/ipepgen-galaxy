@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this workflow bundle, cite the original iPepGen article."
+title: "iPepGen Galaxy workflow bundle"
+type: software
+version: 0.1.0
+date-released: 2026-08-14
+preferred-citation:
+  type: article
+  title: "iPepGen: a modular, immunopeptidogenomic analysis pipeline for discovery, verification, and prioritization of cancer peptide neoantigen candidates"
+  authors:
+    - family-names: Mehta
+      given-names: Subina
+    - family-names: Griffin
+      given-names: Timothy J.
+  journal: Genome Biology
+  volume: 27
+  issue: 111
+  year: 2026
+  doi: 10.1186/s13059-026-04012-2
+

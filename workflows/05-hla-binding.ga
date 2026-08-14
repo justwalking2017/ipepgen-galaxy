@@ -1,0 +1,661 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Updated DEMO:Predict binding using IEDB and check novelty peptides with PepQuery",
+    "comments": [],
+    "creator": [
+        {
+            "class": "Organization",
+            "name": "GalaxyP",
+            "url": "https://galaxyp.org/"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "CC-BY-4.0",
+    "name": "iPepGen-IEDB-HLA-Binding-alleles_Workflow",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "A single column tabular file with an HLA per line IEDB format: e.g.  HLA-A*01:01\n",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "A single column tabular file with an HLA per line IEDB format: e.g.  HLA-A*01:01\n",
+                    "name": "IEDB-optityle-seq2hla-alleles"
+                }
+            ],
+            "label": "IEDB-optityle-seq2hla-alleles",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 0,
+                "top": 243.33593749999997
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"format\": [\"tabular\"], \"tag\": \"\"}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "151ad927-d27e-4565-9fde-e8fe24297b43",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "A fasta file of peptides to test for HLA binding, can be from Arriba\n",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "A fasta file of peptides to test for HLA binding, can be from Arriba\n",
+                    "name": "FASTA-for-IEDB"
+                }
+            ],
+            "label": "FASTA-for-IEDB",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "left": 1.22265625,
+                "top": 363.2162175622211
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": \"\"}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "e9431cfe-4617-4d93-b149-c695c92e2761",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "IEDB binding prediction",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/iedb_api/iedb_api/2.15.3+galaxy0",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "prediction|alleles|allele_file": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "sequence|seq_fasta": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool IEDB",
+                    "name": "sequence"
+                }
+            ],
+            "label": "IEDB",
+            "name": "IEDB",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 300,
+                "top": 240
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/iedb_api/iedb_api/2.15.3+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "1911ec100221",
+                "name": "iedb_api",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"prediction\": {\"tool\": \"mhci\", \"__current_case__\": 0, \"method\": \"netmhcpan_el\", \"alleles\": {\"allelesrc\": \"history\", \"__current_case__\": 0, \"allele_file\": {\"__class__\": \"ConnectedValue\"}}, \"lengths\": [\"8\", \"9\", \"10\", \"11\", \"12\"]}, \"sequence\": {\"seqsrc\": \"fasta\", \"__current_case__\": 0, \"seq_fasta\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "2.15.3+galaxy0",
+            "type": "tool",
+            "uuid": "47d6a4af-d71e-425d-bcea-5f15fd53717d",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "iedb_binding_predictions",
+                    "output_name": "output",
+                    "uuid": "a7fdb54c-93ed-4235-b76b-caa7c15d0dfc"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Peptide annotation",
+            "name": "FASTA-to-Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 680,
+                "top": 350
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Peptide annotation"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/fasta_to_tabular/fasta2tab/1.1.1",
+            "tool_shed_repository": {
+                "changeset_revision": "e7ed3c310b74",
+                "name": "fasta_to_tabular",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"descr_columns\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"keep_first\": \"0\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "99fa7e92-eadb-4663-9d82-bce76baecff6",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Peptide annotation",
+                    "output_name": "output",
+                    "uuid": "7b21a95f-d683-40f5-97a1-e2f5682fb1ef"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "anything less than 2 and more than 0.5 percentile rank",
+            "content_id": "Filter1",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Filter-weak-binder",
+            "name": "Filter",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 510.7421875,
+                "top": 37.125
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Weak-Binders"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                },
+                "TagDatasetActionout_file1": {
+                    "action_arguments": {
+                        "tags": "name:weak"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Filter1",
+            "tool_state": "{\"cond\": \"c11>0.5 and c11<=2\", \"header_lines\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "3a9a608b-3ad5-4826-b7ff-253aa1bdb142",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Weak-Binders",
+                    "output_name": "out_file1",
+                    "uuid": "da34763e-d406-4366-af85-cb805e168105"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "anything less than 0.5 percentile rank",
+            "content_id": "Filter1",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Filter-strong-binders",
+            "name": "Filter",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "left": 508.9921875,
+                "top": 544.95703125
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Strong-Binders"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                },
+                "TagDatasetActionout_file1": {
+                    "action_arguments": {
+                        "tags": "name:strong"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Filter1",
+            "tool_state": "{\"cond\": \"c11<=0.5\", \"header_lines\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.1.1",
+            "type": "tool",
+            "uuid": "8416fa58-4e0f-40a7-bb30-c3b5af628d45",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Strong-Binders",
+                    "output_name": "out_file1",
+                    "uuid": "0f023395-964b-42c2-9e4f-b05a929bf064"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "extracting allele results using pivot",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/table_compute/table_compute/1.2.4+galaxy0",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "singtabop|input": {
+                    "id": 4,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Table Compute",
+                    "name": "singtabop"
+                }
+            ],
+            "label": "pivot_table_iedb_results-weak",
+            "name": "Table Compute",
+            "outputs": [
+                {
+                    "name": "table",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 786.08984375,
+                "top": 0
+            },
+            "post_job_actions": {
+                "RenameDatasetActiontable": {
+                    "action_arguments": {
+                        "newname": "pivot_table_iedb_results_weak"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "table"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/table_compute/table_compute/1.2.4+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "3bf5661c0280",
+                "name": "table_compute",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"out_opts\": [\"ignore_nas\", \"output_headers_col\", \"output_headers_row\"], \"precision\": \"6\", \"singtabop\": {\"use_type\": \"single\", \"__current_case__\": 0, \"input\": {\"__class__\": \"ConnectedValue\"}, \"col_row_names\": [\"has_col_names\", \"has_row_names\"], \"adv\": {\"header\": null, \"nrows\": null, \"skipfooter\": null, \"skip_blank_lines\": true}, \"user\": {\"mode\": \"fulltable\", \"__current_case__\": 4, \"general\": {\"use\": \"pivot\", \"__current_case__\": 2, \"index\": \"icore\", \"column\": \"allele\", \"values\": \"percentile_rank\", \"aggfunc\": \"max\", \"colfun_map\": []}}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.2.4+galaxy0",
+            "type": "tool",
+            "uuid": "385a138a-f7f8-4813-8860-d700329b4135",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "iedb_results_pivot_table_weak",
+                    "output_name": "table",
+                    "uuid": "ec56600f-a26b-4931-8431-d73da746ca4c"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "extracting allele results using pivot",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/table_compute/table_compute/1.2.4+galaxy0",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "singtabop|input": {
+                    "id": 5,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Table Compute",
+                    "name": "singtabop"
+                }
+            ],
+            "label": "pivot_table_iedb_results_strong",
+            "name": "Table Compute",
+            "outputs": [
+                {
+                    "name": "table",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 772.375,
+                "top": 538.44921875
+            },
+            "post_job_actions": {
+                "RenameDatasetActiontable": {
+                    "action_arguments": {
+                        "newname": "pivot_table_iedb_results_strong"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "table"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/table_compute/table_compute/1.2.4+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "3bf5661c0280",
+                "name": "table_compute",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"out_opts\": [\"ignore_nas\", \"output_headers_col\", \"output_headers_row\"], \"precision\": \"6\", \"singtabop\": {\"use_type\": \"single\", \"__current_case__\": 0, \"input\": {\"__class__\": \"ConnectedValue\"}, \"col_row_names\": [\"has_col_names\", \"has_row_names\"], \"adv\": {\"header\": null, \"nrows\": null, \"skipfooter\": null, \"skip_blank_lines\": true}, \"user\": {\"mode\": \"fulltable\", \"__current_case__\": 4, \"general\": {\"use\": \"pivot\", \"__current_case__\": 2, \"index\": \"icore\", \"column\": \"allele\", \"values\": \"percentile_rank\", \"aggfunc\": \"max\", \"colfun_map\": []}}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "1.2.4+galaxy0",
+            "type": "tool",
+            "uuid": "9fdd35ca-6b67-4df6-a558-36353304000e",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "iedb_results_pivot_table_strong",
+                    "output_name": "table",
+                    "uuid": "332fcd7f-7ace-4d23-9ea1-3a53a993db2b"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "tables_0|table": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "tables_1|table": {
+                    "id": 6,
+                    "output_name": "table"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Query Tabular",
+                    "name": "add_to_database"
+                }
+            ],
+            "label": "Weak peptides and HLA binding",
+            "name": "Query Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1090,
+                "top": 30
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Weak peptides and HLA binding"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "tool_shed_repository": {
+                "changeset_revision": "cf4397560712",
+                "name": "query_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"add_to_database\": {\"withdb\": {\"__class__\": \"RuntimeValue\"}}, \"addqueries\": {\"queries\": []}, \"modify_database\": {\"sql_stmts\": []}, \"query_result\": {\"header\": \"yes\", \"__current_case__\": 0, \"header_prefix\": null}, \"save_db\": false, \"sqlquery\": \"SELECT t2.*\\nFROM t1\\nJOIN t2\\n    ON t1.c2 = t2.icore;\", \"tables\": [{\"__index__\": 0, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t1\", \"column_names_from_first_line\": false, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}, {\"__index__\": 1, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t2\", \"column_names_from_first_line\": true, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}], \"workdb\": \"workdb.sqlite\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "3.3.2",
+            "type": "tool",
+            "uuid": "63c2ee35-72ad-4c5d-a56f-6e2bed43f8ca",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Weak peptides and HLA binding",
+                    "output_name": "output",
+                    "uuid": "fc9c90dc-fe35-4bfd-aacc-67f01807b49a"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "tables_0|table": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "tables_1|table": {
+                    "id": 7,
+                    "output_name": "table"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Query Tabular",
+                    "name": "add_to_database"
+                }
+            ],
+            "label": "Strong peptides and HLA binding",
+            "name": "Query Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1180,
+                "top": 490
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Strong peptides and HLA binding"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "tool_shed_repository": {
+                "changeset_revision": "cf4397560712",
+                "name": "query_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"add_to_database\": {\"withdb\": {\"__class__\": \"RuntimeValue\"}}, \"addqueries\": {\"queries\": []}, \"modify_database\": {\"sql_stmts\": []}, \"query_result\": {\"header\": \"yes\", \"__current_case__\": 0, \"header_prefix\": null}, \"save_db\": false, \"sqlquery\": \"SELECT t2.*\\nFROM t1\\nJOIN t2\\n    ON t1.c2 = t2.icore;\", \"tables\": [{\"__index__\": 0, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t1\", \"column_names_from_first_line\": false, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}, {\"__index__\": 1, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t2\", \"column_names_from_first_line\": true, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}], \"workdb\": \"workdb.sqlite\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "3.3.2",
+            "type": "tool",
+            "uuid": "457221fa-685f-4833-8b49-1e4093ad8149",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Strong peptides and HLA binding",
+                    "output_name": "output",
+                    "uuid": "d0b33190-df44-4796-aafe-d2e0ffdfe20a"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "tables_0|table": {
+                    "id": 8,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Query Tabular",
+                    "name": "add_to_database"
+                }
+            ],
+            "label": "Weak_neopeptides",
+            "name": "Query Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1460,
+                "top": 0
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Weak_neopeptides"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "tool_shed_repository": {
+                "changeset_revision": "cf4397560712",
+                "name": "query_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"add_to_database\": {\"withdb\": {\"__class__\": \"RuntimeValue\"}}, \"addqueries\": {\"queries\": []}, \"modify_database\": {\"sql_stmts\": []}, \"query_result\": {\"header\": \"no\", \"__current_case__\": 1}, \"save_db\": false, \"sqlquery\": \"SELECT t1.icore\\nFROM t1\\norder by t1.icore\", \"tables\": [{\"__index__\": 0, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t1\", \"column_names_from_first_line\": true, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}], \"workdb\": \"workdb.sqlite\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "3.3.2",
+            "type": "tool",
+            "uuid": "aa560521-b14e-4675-b05f-6a30b69fb303",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Weak_neopeptides",
+                    "output_name": "output",
+                    "uuid": "880168f6-7a93-4426-9893-fda664d5f235"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "tables_0|table": {
+                    "id": 9,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Query Tabular",
+                    "name": "add_to_database"
+                }
+            ],
+            "label": "Strong_neopeptides",
+            "name": "Query Tabular",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 1560,
+                "top": 600
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "Strong_neopeptides"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/query_tabular/query_tabular/3.3.2",
+            "tool_shed_repository": {
+                "changeset_revision": "cf4397560712",
+                "name": "query_tabular",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"add_to_database\": {\"withdb\": {\"__class__\": \"RuntimeValue\"}}, \"addqueries\": {\"queries\": []}, \"modify_database\": {\"sql_stmts\": []}, \"query_result\": {\"header\": \"no\", \"__current_case__\": 1}, \"save_db\": false, \"sqlquery\": \"SELECT t1.icore\\nFROM t1\\norder by t1.icore\", \"tables\": [{\"__index__\": 0, \"table\": {\"__class__\": \"ConnectedValue\"}, \"input_opts\": {\"linefilters\": []}, \"tbl_opts\": {\"table_name\": \"t1\", \"column_names_from_first_line\": true, \"col_names\": \"\", \"load_named_columns\": false, \"pkey_autoincr\": \"\", \"indexes\": []}}], \"workdb\": \"workdb.sqlite\", \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_uuid": null,
+            "tool_version": "3.3.2",
+            "type": "tool",
+            "uuid": "c9cf488d-bb40-45d7-8956-58f880cb15d4",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "Strong_neopeptides",
+                    "output_name": "output",
+                    "uuid": "6bc5be77-f3f2-4dcf-a465-4eb922563444"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "IEDB",
+        "name:neoantigen"
+    ],
+    "uuid": "306ac2cd-42a9-4520-a43e-e93972cc2ea0",
+    "version": 15
+}

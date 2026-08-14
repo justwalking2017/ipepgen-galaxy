@@ -1,0 +1,5 @@
+{
+  "0": {"id": "GALAXY_DATASET_ID", "src": "hda"},
+  "1": {"id": "GALAXY_COLLECTION_ID", "src": "hdca"}
+}
+
