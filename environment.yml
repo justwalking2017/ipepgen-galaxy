@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3.12
   - pip
+  - bioconda::snakemake-minimal>=9,<10
   - pip:
       - -e .
       - pytest>=8,<9
-

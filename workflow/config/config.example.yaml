@@ -1,0 +1,32 @@
+# Choose "one-click" for the published end-to-end workflow or "modular" for
+# the seven-module DAG. Replace every placeholder before a real run.
+mode: one-click
+result_dir: results
+
+modules:
+  one_click:
+    url: https://usegalaxy.eu
+    api_key_env: GALAXY_API_KEY
+    timeout: 604800
+    polling_interval: 30
+    history_name: iPepGen Snakemake one-click
+    inputs:
+      # Existing Galaxy dataset:
+      "0": {id: REPLACE_WITH_DATASET_ID, src: hda}
+      # Local files are uploaded automatically:
+      # "1": {path: data/sample_R1.fastq.gz, file_type: fastqsanger.gz, to_posix_lines: false}
+
+  # The entries below are used only when mode is "modular". Step IDs must
+  # match the corresponding .ga workflow. A downstream input can select an
+  # upstream output dynamically, for example:
+  # discovery:
+  #   inputs:
+  #     "0": {from: gene_fusion, output_name: "Fusion FASTA"}
+  #     "1": {from: non_reference, output_hid: 41}
+  gene_fusion: {inputs: {}}
+  non_reference: {inputs: {}}
+  discovery: {inputs: {}}
+  verification: {inputs: {}}
+  peptide_annotation: {inputs: {}}
+  hla_genotyping: {inputs: {}}
+  hla_binding: {inputs: {}}

@@ -1,0 +1,112 @@
+from snakemake.utils import min_version
+
+min_version("9.0")
+configfile: "workflow/config/config.example.yaml"
+
+MODE = config.get("mode", "one-click")
+RESULT_DIR = config.get("result_dir", "results")
+MODULES = config.get("modules", {})
+
+
+def module_config(name):
+    if name not in MODULES:
+        raise ValueError(f"missing modules.{name} in config")
+    return MODULES[name]
+
+
+if MODE == "one-click":
+    rule all:
+        input:
+            f"{RESULT_DIR}/one-click.json"
+
+    rule one_click:
+        output:
+            f"{RESULT_DIR}/one-click.json"
+        log:
+            f"{RESULT_DIR}/logs/one-click.log"
+        params:
+            name="one_click",
+            module=module_config("one_click"),
+            workflow="workflows/one-click.ga"
+        script:
+            "scripts/run_galaxy_workflow.py"
+
+elif MODE == "modular":
+    rule all:
+        input:
+            f"{RESULT_DIR}/04-peptide-annotation.json",
+            f"{RESULT_DIR}/05-hla-binding.json"
+
+    rule gene_fusion:
+        output: f"{RESULT_DIR}/01-gene-fusion.json"
+        log: f"{RESULT_DIR}/logs/01-gene-fusion.log"
+        params:
+            name="gene_fusion",
+            module=module_config("gene_fusion"),
+            workflow="workflows/01-gene-fusion.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule non_reference:
+        output: f"{RESULT_DIR}/01-non-reference.json"
+        log: f"{RESULT_DIR}/logs/01-non-reference.log"
+        params:
+            name="non_reference",
+            module=module_config("non_reference"),
+            workflow="workflows/01-non-reference.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule discovery:
+        input:
+            f"{RESULT_DIR}/01-gene-fusion.json",
+            f"{RESULT_DIR}/01-non-reference.json"
+        output: f"{RESULT_DIR}/02-discovery-fragpipe.json"
+        log: f"{RESULT_DIR}/logs/02-discovery-fragpipe.log"
+        params:
+            name="discovery",
+            module=module_config("discovery"),
+            workflow="workflows/02-discovery-fragpipe.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule verification:
+        input: f"{RESULT_DIR}/02-discovery-fragpipe.json"
+        output: f"{RESULT_DIR}/03-verification-pepquery2.json"
+        log: f"{RESULT_DIR}/logs/03-verification-pepquery2.log"
+        params:
+            name="verification",
+            module=module_config("verification"),
+            workflow="workflows/03-verification-pepquery2.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule peptide_annotation:
+        input: f"{RESULT_DIR}/03-verification-pepquery2.json"
+        output: f"{RESULT_DIR}/04-peptide-annotation.json"
+        log: f"{RESULT_DIR}/logs/04-peptide-annotation.log"
+        params:
+            name="peptide_annotation",
+            module=module_config("peptide_annotation"),
+            workflow="workflows/04-peptide-annotation.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule hla_genotyping:
+        output: f"{RESULT_DIR}/05-hla-genotyping.json"
+        log: f"{RESULT_DIR}/logs/05-hla-genotyping.log"
+        params:
+            name="hla_genotyping",
+            module=module_config("hla_genotyping"),
+            workflow="workflows/05-hla-genotyping.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+    rule hla_binding:
+        input:
+            f"{RESULT_DIR}/03-verification-pepquery2.json",
+            f"{RESULT_DIR}/05-hla-genotyping.json"
+        output: f"{RESULT_DIR}/05-hla-binding.json"
+        log: f"{RESULT_DIR}/logs/05-hla-binding.log"
+        params:
+            name="hla_binding",
+            module=module_config("hla_binding"),
+            workflow="workflows/05-hla-binding.ga"
+        script: "scripts/run_galaxy_workflow.py"
+
+else:
+    raise ValueError("mode must be 'one-click' or 'modular'")

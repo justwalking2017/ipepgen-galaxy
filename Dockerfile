@@ -7,7 +7,8 @@ WORKDIR /opt/ipepgen
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 COPY workflows ./workflows
-RUN pip install --no-cache-dir .
+COPY workflow ./workflow
+RUN pip install --no-cache-dir ".[workflow]"
 
 ENTRYPOINT ["ipepgen"]
 CMD ["--help"]

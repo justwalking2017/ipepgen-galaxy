@@ -1,6 +1,6 @@
 # iPepGen Galaxy workflow bundle
 
-A reproducible bundle of the official Galaxy workflows described in the 2026 iPepGen paper, plus a small command-line client for validation, import, and remote execution.
+A reproducible bundle of the official Galaxy workflows described in the 2026 iPepGen paper, a command-line client, and a Snakemake DAG for remote execution on Galaxy.
 
 This repository does **not** reimplement the scientific algorithms or redistribute FragPipe components. The `.ga` files preserve the exact Galaxy tool versions and parameter mappings published by the authors. Full analysis runs on a Galaxy server with the referenced tools and sufficient compute.
 
@@ -52,6 +52,20 @@ docker build -t ipepgen-galaxy .
 docker run --rm ipepgen-galaxy validate
 ```
 
+## Snakemake workflow
+
+Version 0.2 adds an executable Snakemake workflow with `one-click` and `modular` modes. Galaxy still performs the licensed and resource-intensive scientific computation; Snakemake handles the module DAG, uploads, submission, polling, logs, and JSON result manifests.
+
+```bash
+pip install -e ".[workflow]"
+cp workflow/config/config.example.yaml config.yaml
+# Replace placeholders with local paths or Galaxy dataset/collection IDs.
+export GALAXY_API_KEY=your-api-key
+snakemake --snakefile workflow/Snakefile --configfile config.yaml --cores 2
+```
+
+See [`workflow/README.md`](workflow/README.md) for the DAG modes and configuration details.
+
 Pass credentials only at runtime:
 
 ```bash
@@ -76,4 +90,3 @@ Every push and pull request validates all eight Galaxy exports, runs unit tests,
 Please cite Mehta et al., “iPepGen: a modular, immunopeptidogenomic analysis pipeline for discovery, verification, and prioritization of cancer peptide neoantigen candidates,” *Genome Biology* 27, 111 (2026), https://doi.org/10.1186/s13059-026-04012-2.
 
 The demonstration data are available as MassIVE `MSV000100019` and PRIDE `PXD071206`. Training is available through the [Galaxy Training Network iPepGen learning pathway](https://training.galaxyproject.org/training-material/learning-pathways/neoantigen.html).
-

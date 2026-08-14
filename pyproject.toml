@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ipepgen-galaxy"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible Galaxy workflow bundle and CLI for the iPepGen pipeline"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "iPepGen Galaxy workflow bundle contributors"}]
-dependencies = ["bioblend>=1.6,<2"]
+dependencies = ["bioblend>=1.9,<2"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
@@ -20,6 +20,9 @@ classifiers = [
 [project.scripts]
 ipepgen = "ipepgen.cli:main"
 
+[project.optional-dependencies]
+workflow = ["snakemake>=9,<10"]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
@@ -28,4 +31,3 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
