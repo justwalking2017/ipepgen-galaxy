@@ -1,0 +1,18 @@
+executor: slurm
+jobs: 50
+latency-wait: 120
+rerun-incomplete: true
+printshellcmds: true
+software-deployment-method: apptainer
+apptainer-args: "--cleanenv --bind $PWD,$TMPDIR"
+default-resources:
+  - runtime=240
+  - mem_mb=8000
+  - disk_mb=20000
+  - slurm_account=""
+  - slurm_partition=""
+set-resources:
+  fragpipe_search:
+    runtime: 720
+  customprodb:
+    runtime: 1800

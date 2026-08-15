@@ -8,6 +8,7 @@ COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
 COPY workflows ./workflows
 COPY workflow ./workflow
+COPY hpc ./hpc
 RUN pip install --no-cache-dir ".[workflow]"
 
 ENTRYPOINT ["ipepgen"]

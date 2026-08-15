@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ipepgen-galaxy"
-version = "0.2.0"
+version = "0.3.0"
 description = "Reproducible Galaxy workflow bundle and CLI for the iPepGen pipeline"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -21,7 +21,7 @@ classifiers = [
 ipepgen = "ipepgen.cli:main"
 
 [project.optional-dependencies]
-workflow = ["snakemake>=9,<10"]
+workflow = ["snakemake>=9,<10", "snakemake-executor-plugin-slurm>=2,<3"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

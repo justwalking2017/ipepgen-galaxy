@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: mambaorg/micromamba:2.3.2
+
+%post
+    micromamba install -y -n base -c conda-forge -c bioconda python=3.11 optitype=1.3.5 mhcflurry=2.1.4 pandas
+    micromamba clean -a -y
+    /opt/conda/bin/mhcflurry-downloads fetch models_class1_presentation
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+

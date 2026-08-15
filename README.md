@@ -54,7 +54,7 @@ docker run --rm ipepgen-galaxy validate
 
 ## Snakemake workflow
 
-Version 0.2 adds an executable Snakemake workflow with `one-click` and `modular` modes. Galaxy still performs the licensed and resource-intensive scientific computation; Snakemake handles the module DAG, uploads, submission, polling, logs, and JSON result manifests.
+Version 0.2 added Galaxy-backed Snakemake orchestration. Version 0.3 adds a separate Galaxy-free HPC implementation in [`hpc/`](hpc/) that invokes native tools inside Singularity/Apptainer images and includes a Slurm executor profile.
 
 ```bash
 pip install -e ".[workflow]"
@@ -65,6 +65,8 @@ snakemake --snakefile workflow/Snakefile --configfile config.yaml --cores 2
 ```
 
 See [`workflow/README.md`](workflow/README.md) for the DAG modes and configuration details.
+
+For a fully local HPC run with no Galaxy or BioBlend calls, use [`hpc/Snakefile`](hpc/Snakefile) and follow [`hpc/README.md`](hpc/README.md). FragPipe remains user-supplied because its academic/non-commercial license does not permit bundling it into the public release image.
 
 Pass credentials only at runtime:
 

@@ -15,5 +15,7 @@ jobs:
       - run: ipepgen validate
       - run: pytest -q
       - run: snakemake --snakefile workflow/Snakefile --configfile workflow/config/config.example.yaml --dry-run --cores 1
+      - run: snakemake --snakefile hpc/Snakefile --configfile hpc/tests/config.yaml --dry-run --cores 2
+      - run: python -m compileall -q hpc/scripts
       - run: docker build -t ipepgen-galaxy:test .
       - run: docker run --rm ipepgen-galaxy:test validate

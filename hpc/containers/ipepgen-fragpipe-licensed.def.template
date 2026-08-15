@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: eclipse-temurin:17-jre
+
+# Build only after downloading FragPipe and accepting its license.
+# Place the extracted licensed distribution at vendor/fragpipe.
+%files
+    vendor/fragpipe /opt/fragpipe
+
+%environment
+    export PATH=/opt/fragpipe/bin:/opt/fragpipe:$PATH
+
+%runscript
+    exec /opt/fragpipe/bin/fragpipe "$@"
+

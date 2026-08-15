@@ -1,0 +1,37 @@
+output_dir: hpc-test-results
+samples:
+  test:
+    rna_r1: workflows/README.md
+    rna_r2: workflows/README.md
+    raw_ms: workflows/README.md
+references:
+  genome_fasta: workflows/README.md
+  annotation_gtf: workflows/README.md
+  reference_proteome: workflows/README.md
+  blast_protein_db: workflows/README.md
+  arriba_blacklist: workflows/README.md
+  arriba_known_fusions: workflows/README.md
+  arriba_protein_domains: workflows/README.md
+containers:
+  genomics: containers/ipepgen-genomics.sif
+  helpers: containers/ipepgen-helpers.sif
+  customprodb: containers/ipepgen-customprodb.sif
+  proteomics_open: containers/ipepgen-proteomics-open.sif
+  hla: containers/ipepgen-hla.sif
+  fragpipe: containers/ipepgen-fragpipe-licensed.sif
+licensed:
+  fragpipe_workflow: workflows/README.md
+parameters:
+  star_threads: 2
+  star_mem_mb: 1000
+  alignment_threads: 2
+  alignment_mem_mb: 1000
+  customprodb_threads: 1
+  customprodb_mem_mb: 1000
+  rpkm_cutoff: 1.0
+  fragpipe_threads: 2
+  fragpipe_mem_mb: 1000
+  pepquery_threads: 1
+  pepquery_mem_mb: 1000
+  blast_threads: 1
+  hla_threads: 1

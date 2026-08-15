@@ -1,0 +1,191 @@
+from pathlib import Path
+from snakemake.utils import min_version
+
+min_version("9.0")
+
+SAMPLES = config["samples"]
+OUT = config.get("output_dir", "hpc-results")
+C = config["containers"]
+R = config["references"]
+P = config["parameters"]
+
+
+rule all:
+    input:
+        expand(f"{OUT}/{{sample}}/05-prioritization/prioritized.tsv", sample=SAMPLES)
+
+
+rule star_index:
+    input: fasta=R["genome_fasta"], gtf=R["annotation_gtf"]
+    output: directory(f"{OUT}/reference/star")
+    threads: P["star_threads"]
+    resources: mem_mb=P["star_mem_mb"]
+    container: C["genomics"]
+    shell:
+        "STAR --runMode genomeGenerate --runThreadN {threads} --genomeDir {output} "
+        "--genomeFastaFiles {input.fasta:q} --sjdbGTFfile {input.gtf:q}"
+
+
+rule fusion_candidates:
+    input:
+        r1=lambda w: config["samples"][w.sample]["rna_r1"],
+        r2=lambda w: config["samples"][w.sample]["rna_r2"],
+        index=rules.star_index.output,
+        fasta=R["genome_fasta"],
+        gtf=R["annotation_gtf"],
+        blacklist=R["arriba_blacklist"],
+        known=R["arriba_known_fusions"],
+        domains=R["arriba_protein_domains"]
+    output:
+        chimeric=f"{OUT}/{{sample}}/01-database/Chimeric.out.sam",
+        fusions=f"{OUT}/{{sample}}/01-database/fusions.tsv",
+        fasta=f"{OUT}/{{sample}}/01-database/fusions.fasta"
+    threads: P["star_threads"]
+    resources: mem_mb=P["star_mem_mb"]
+    container: C["genomics"]
+    shell:
+        "STAR --genomeDir {input.index} --readFilesIn {input.r1:q} {input.r2:q} "
+        "--readFilesCommand zcat --runThreadN {threads} --outFileNamePrefix {OUT}/{wildcards.sample}/01-database/ "
+        "--outSAMtype BAM Unsorted --outSAMunmapped Within --outBAMcompression 0 "
+        "--outFilterMultimapNmax 50 --peOverlapNbasesMin 10 --alignSplicedMateMapLminOverLmate 0.5 "
+        "--alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentMin 10 --chimOutType WithinBAM HardClip "
+        "--chimJunctionOverhangMin 10 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 "
+        "--chimScoreSeparation 1 --chimSegmentReadGapMax 3 --chimMultimapNmax 50 && "
+        "arriba -x {OUT}/{wildcards.sample}/01-database/Aligned.out.bam -c {output.chimeric} "
+        "-g {input.gtf:q} -a {input.fasta:q} -b {input.blacklist:q} -k {input.known:q} "
+        "-p {input.domains:q} -o {output.fusions:q} && "
+        "python hpc/scripts/fusion_to_fasta.py {output.fusions:q} {output.fasta:q}"
+
+
+rule transcriptome_and_variants:
+    input:
+        r1=lambda w: config["samples"][w.sample]["rna_r1"],
+        r2=lambda w: config["samples"][w.sample]["rna_r2"],
+        fasta=R["genome_fasta"], gtf=R["annotation_gtf"]
+    output:
+        bam=f"{OUT}/{{sample}}/01-database/rna.sorted.bam",
+        vcf=f"{OUT}/{{sample}}/01-database/variants.vcf.gz",
+        assembled=f"{OUT}/{{sample}}/01-database/assembled.gtf",
+        novel_fasta=f"{OUT}/{{sample}}/01-database/novel-transcripts.fasta"
+    threads: P["alignment_threads"]
+    resources: mem_mb=P["alignment_mem_mb"]
+    container: C["genomics"]
+    shell:
+        "mkdir -p {OUT}/{wildcards.sample}/01-database {OUT}/reference/hisat2 && "
+        "test -e {OUT}/reference/hisat2/genome.1.ht2 || hisat2-build {input.fasta:q} {OUT}/reference/hisat2/genome && "
+        "hisat2 -x {OUT}/reference/hisat2/genome -1 {input.r1:q} -2 {input.r2:q} -p {threads} | "
+        "samtools sort -@ {threads} -o {output.bam:q} && samtools index {output.bam:q} && "
+        "stringtie {output.bam:q} -G {input.gtf:q} -p {threads} -o {output.assembled:q} && "
+        "freebayes -f {input.fasta:q} {output.bam:q} | bgzip -c > {output.vcf:q} && tabix -p vcf {output.vcf:q} && "
+        "gffread {output.assembled:q} -g {input.fasta:q} -w {OUT}/{wildcards.sample}/01-database/transcripts.fa && "
+        "python hpc/scripts/translate_fasta.py {OUT}/{wildcards.sample}/01-database/transcripts.fa {output.novel_fasta:q} --min-aa 10"
+
+
+rule customprodb:
+    input:
+        bam=rules.transcriptome_and_variants.output.bam,
+        vcf=rules.transcriptome_and_variants.output.vcf,
+        fasta=R["genome_fasta"], gtf=R["annotation_gtf"], protein=R["reference_proteome"]
+    output:
+        fasta=f"{OUT}/{{sample}}/01-database/variants.fasta"
+    threads: P["customprodb_threads"]
+    resources: mem_mb=P["customprodb_mem_mb"]
+    container: C["customprodb"]
+    shell:
+        "mkdir -p {OUT}/{wildcards.sample}/01-database/precisionprodb && "
+        "PrecisionProDB -m {input.vcf:q} -g {input.fasta:q} -p {input.protein:q} -f {input.gtf:q} "
+        "-o {OUT}/{wildcards.sample}/01-database/precisionprodb/sample -t {threads} && "
+        "cp {OUT}/{wildcards.sample}/01-database/precisionprodb/sample.pergeno.protein_changed.fa {output.fasta:q}"
+
+
+rule merge_database:
+    input:
+        reference=R["reference_proteome"],
+        fusion=rules.fusion_candidates.output.fasta,
+        novel=rules.transcriptome_and_variants.output.novel_fasta,
+        variants=rules.customprodb.output.fasta
+    output: f"{OUT}/{{sample}}/01-database/ipepgen.fasta"
+    container: C["helpers"]
+    shell:
+        "python hpc/scripts/merge_fasta.py {output:q} {input.reference:q} {input.fusion:q} {input.novel:q} {input.variants:q}"
+
+
+rule fragpipe_search:
+    input:
+        raw=lambda w: config["samples"][w.sample]["raw_ms"],
+        fasta=rules.merge_database.output,
+        workflow=config["licensed"]["fragpipe_workflow"]
+    output:
+        peptides=f"{OUT}/{{sample}}/02-discovery/combined_peptide.tsv"
+    threads: P["fragpipe_threads"]
+    resources: mem_mb=P["fragpipe_mem_mb"]
+    container: C["fragpipe"]
+    shell:
+        "mkdir -p {OUT}/{wildcards.sample}/02-discovery && "
+        "printf '%s\\t%s\\t%s\\t%s\\n' {input.raw:q} {wildcards.sample:q} 1 DDA > {OUT}/{wildcards.sample}/02-discovery/manifest.tsv && "
+        "fragpipe --headless --workflow {input.workflow:q} --manifest {OUT}/{wildcards.sample}/02-discovery/manifest.tsv "
+        "--workdir {OUT}/{wildcards.sample}/02-discovery --config-tools-folder /opt/fragpipe/tools && "
+        "test -s {output.peptides:q}"
+
+
+rule candidate_peptides:
+    input: report=rules.fragpipe_search.output.peptides, reference=R["reference_proteome"]
+    output:
+        tsv=f"{OUT}/{{sample}}/02-discovery/candidates.tsv",
+        fasta=f"{OUT}/{{sample}}/02-discovery/candidates.fasta"
+    container: C["helpers"]
+    shell:
+        "python hpc/scripts/extract_candidates.py {input.report:q} {input.reference:q} {output.tsv:q} {output.fasta:q}"
+
+
+rule pepquery2:
+    input:
+        raw=lambda w: config["samples"][w.sample]["raw_ms"],
+        peptides=rules.candidate_peptides.output.tsv,
+        reference=R["reference_proteome"]
+    output:
+        psm=f"{OUT}/{{sample}}/03-verification/psm_rank.txt"
+    threads: P["pepquery_threads"]
+    resources: mem_mb=P["pepquery_mem_mb"]
+    container: C["proteomics_open"]
+    shell:
+        "mkdir -p {OUT}/{wildcards.sample}/03-verification/mgf && "
+        "ThermoRawFileParser -i={input.raw:q} -o={OUT}/{wildcards.sample}/03-verification/mgf -f=2 && "
+        "pepquery -i {input.peptides:q} -db {input.reference:q} -ms {OUT}/{wildcards.sample}/03-verification/mgf "
+        "-o {OUT}/{wildcards.sample}/03-verification -t 1 -minLength 9 -maxLength 11 -cpu {threads} && "
+        "test -s {output.psm:q}"
+
+
+rule verify_novelty:
+    input: psm=rules.pepquery2.output.psm, candidates=rules.candidate_peptides.output.fasta
+    output: f"{OUT}/{{sample}}/03-verification/verified.tsv"
+    threads: P["blast_threads"]
+    container: C["proteomics_open"]
+    shell:
+        "blastp -query {input.candidates:q} -db {R[blast_protein_db]:q} -outfmt '6 qseqid pident length qlen sseqid' "
+        "-num_threads {threads} > {OUT}/{wildcards.sample}/03-verification/blast.tsv && "
+        "python hpc/scripts/filter_verified.py {input.psm:q} {OUT}/{wildcards.sample}/03-verification/blast.tsv {output:q}"
+
+
+rule hla_typing:
+    input:
+        r1=lambda w: config["samples"][w.sample]["rna_r1"],
+        r2=lambda w: config["samples"][w.sample]["rna_r2"]
+    output: f"{OUT}/{{sample}}/05-prioritization/hla.txt"
+    threads: P["hla_threads"]
+    container: C["hla"]
+    shell:
+        "mkdir -p {OUT}/{wildcards.sample}/05-prioritization/optitype && "
+        "OptiTypePipeline.py -i {input.r1:q} {input.r2:q} --rna -v -o {OUT}/{wildcards.sample}/05-prioritization/optitype && "
+        "python hpc/scripts/optitype_alleles.py {OUT}/{wildcards.sample}/05-prioritization/optitype {output:q}"
+
+
+rule prioritize:
+    input:
+        verified=rules.verify_novelty.output,
+        hla=rules.hla_typing.output
+    output: f"{OUT}/{{sample}}/05-prioritization/prioritized.tsv"
+    threads: P["hla_threads"]
+    container: C["hla"]
+    shell:
+        "python hpc/scripts/prioritize_mhcflurry.py {input.verified:q} {input.hla:q} {output:q}"

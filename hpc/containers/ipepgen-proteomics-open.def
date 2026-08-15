@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: mambaorg/micromamba:2.3.2
+
+%post
+    micromamba install -y -n base -c conda-forge -c bioconda \
+      openjdk=17 thermorawfileparser=1.4.5 pepquery2=2.0.2 blast=2.14.1
+    micromamba clean -a -y
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+

@@ -1,0 +1,38 @@
+output_dir: hpc-results
+samples:
+  STS26T:
+    rna_r1: data/STS26T_R1.fastq.gz
+    rna_r2: data/STS26T_R2.fastq.gz
+    raw_ms: data/STS26T.raw
+references:
+  genome_fasta: refs/GRCh38.fa
+  annotation_gtf: refs/Homo_sapiens.GRCh38.106.gtf
+  reference_proteome: refs/human-plus-crap.fasta
+  blast_protein_db: refs/blast/human
+  arriba_blacklist: refs/arriba/blacklist.tsv.gz
+  arriba_known_fusions: refs/arriba/known_fusions.tsv.gz
+  arriba_protein_domains: refs/arriba/protein_domains.gff3
+containers:
+  genomics: containers/ipepgen-genomics.sif
+  helpers: containers/ipepgen-helpers.sif
+  customprodb: containers/ipepgen-customprodb.sif
+  proteomics_open: containers/ipepgen-proteomics-open.sif
+  hla: containers/ipepgen-hla.sif
+  fragpipe: containers/ipepgen-fragpipe-licensed.sif
+licensed:
+  fragpipe_workflow: refs/fragpipe/Nonspecific-HLA.workflow
+parameters:
+  star_threads: 16
+  star_mem_mb: 64000
+  alignment_threads: 10
+  alignment_mem_mb: 32000
+  customprodb_threads: 10
+  customprodb_mem_mb: 32000
+  rpkm_cutoff: 1.0
+  fragpipe_threads: 16
+  fragpipe_mem_mb: 250000
+  pepquery_threads: 2
+  pepquery_mem_mb: 8000
+  blast_threads: 4
+  hla_threads: 8
+
