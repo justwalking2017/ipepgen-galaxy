@@ -13,6 +13,8 @@ RNA sequencing. It is designed for Slurm and Singularity/Apptainer.
 4. Enumerates 8–11 aa peptides that cross the junction.
 5. Removes exact matches to a supplied normal reference proteome.
 6. Predicts patient-specific HLA-I presentation with MHCflurry and ranks hits.
+7. Optionally normalizes pVACsplice and SNAF results, builds a peptide-level
+   consensus table, and renders a self-contained HTML report.
 
 SCASL 1.0.0 is supplied as a pinned optional container because it can generate
 and cluster single-cell splice-junction matrices from BAM or STAR `SJ.out.tab`
@@ -57,7 +59,30 @@ mkdir -p containers
 apptainer build containers/ipepgen-scasl.sif scneo/containers/ipepgen-scasl.def
 apptainer build containers/ipepgen-scneo-helpers.sif scneo/containers/ipepgen-scneo-helpers.def
 apptainer build containers/ipepgen-scneo-mhcflurry.sif scneo/containers/ipepgen-scneo-mhcflurry.def
+apptainer build containers/ipepgen-snaf.sif scneo/containers/ipepgen-snaf.def
+apptainer build containers/ipepgen-pvacsplice.sif scneo/containers/ipepgen-pvacsplice.def
 ```
+
+## Cross-validation
+
+Set `validation.snaf.enabled` or `validation.pvacsplice.enabled` in the YAML
+configuration and provide the corresponding command template and input files.
+Both branches are optional: disabled or inapplicable methods are recorded in
+the report instead of being silently treated as negative evidence.
+
+SNAF expects its AltAnalyze-style gene/exon UID junction-count matrix, HLA
+alleles, and matching reference bundle. pVACsplice requires a VEP-annotated
+VCF, matched BAM, RegTools `cis-splice-effects` output, reference FASTA and GTF.
+Consequently, neither tool can scientifically validate an arbitrary coordinate
+matrix alone. The workflow normalizes their native TSV results and considers a
+candidate cross-validated only when the same peptide is supported by at least
+two methods.
+
+The checked-in pilot report is
+[`reports/GSE118389-PT089/neoantigen-report.html`](../reports/GSE118389-PT089/neoantigen-report.html).
+It uses real SCASL junction files and real MHCflurry predictions; its assumed
+HLA alleles and chromosome-only scope make it a workflow demonstration, not a
+patient result.
 
 For a local smoke test (the mock backend is deterministic and is **not** a
 scientific binding predictor):

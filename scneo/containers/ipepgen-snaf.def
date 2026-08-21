@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: continuumio/miniconda3:24.7.1-0
+
+%labels
+    org.opencontainers.image.title SNAF cross-validator for iPepGen scNeo
+    org.opencontainers.image.source https://github.com/frankligy/SNAF
+    org.opencontainers.image.licenses MIT
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends git build-essential && rm -rf /var/lib/apt/lists/*
+    conda install -y python=3.7 pip && conda clean -afy
+    pip install git+https://github.com/frankligy/SNAF.git@e23ce39512a1a7f58c74e59b4b7cedc89248b908
+
+%runscript
+    exec python "$@"

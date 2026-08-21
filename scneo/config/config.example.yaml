@@ -23,6 +23,23 @@ containers:
   helpers: containers/ipepgen-scneo-helpers.sif
   predictor: containers/ipepgen-scneo-mhcflurry.sif
 
+validation:
+  snaf:
+    enabled: false
+    # Set to SNAF's neoantigen result TSV after running its documented
+    # AltAnalyze-compatible matrix workflow.
+    result_tsv: /project/mm/snaf/shared_vs_unique_neoantigen_all.txt
+    reason: "SNAF-compatible matrix and reference database not supplied"
+  pvacsplice:
+    enabled: false
+    # pVACsplice is cis-variant-aware and additionally requires a matched
+    # VEP-annotated VCF, BAM-derived RegTools TSV, genome, and GTF.
+    result_tsv: /project/mm/pvacsplice/MHC_Class_I/sample.all_epitopes.tsv
+    reason: "matched VEP VCF/BAM/RegTools evidence not supplied"
+
+report:
+  metadata_json: /project/mm/report-metadata.json
+
 dataset:
   study: "Single Cell Analysis of the Tumor Microenvironment Landscape Across the Disease Spectrum of Multiple Myeloma"
   controlled_fastq: EGAD50000002519

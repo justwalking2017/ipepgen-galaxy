@@ -7,7 +7,7 @@ From: python:3.11-slim
 
 %post
     apt-get update && apt-get install -y --no-install-recommends gcc g++ && rm -rf /var/lib/apt/lists/*
-    python -m pip install --no-cache-dir biopython==1.85 mhcflurry==2.1.4
+    python -m pip install --no-cache-dir 'setuptools<81' 'numpy<2' 'scipy<1.15' 'tensorflow==2.16.2' 'tf-keras==2.16.0' biopython==1.85 mhcflurry==2.1.4
     mhcflurry-downloads fetch models_class1_presentation
 
 %environment

@@ -54,3 +54,21 @@ def test_scasl_matrix_conversion(tmp_path):
         {"junction_id": "chr1:31-61:+", "cell_id": "T1", "count": "3"},
         {"junction_id": "chr1:31-61:+", "cell_id": "T2", "count": "2"},
     ]
+
+
+def test_consensus_and_html_report(tmp_path):
+    primary = tmp_path / "primary.tsv"
+    snaf = tmp_path / "snaf.tsv"
+    pvac = tmp_path / "pvac.tsv"
+    consensus = tmp_path / "consensus.tsv"
+    report = tmp_path / "report.html"
+    primary.write_text("candidate_id\tjunction_id\tpeptide\tbest_allele\taffinity_nm\tpresentation_score\ttumor_cells\ttumor_reads\nC1\tchr1:31-61:+\tAAAAAAAA\tHLA-A*02:01\t100\t0.9\t3\t6\n", encoding="utf-8")
+    snaf.write_text("method\tstatus\tjunction_id\tpeptide\tallele\taffinity_nm\tsource_file\nsnaf\tcandidate\tJ1\tAAAAAAAA\tHLA-A*02:01\t90\tx\n", encoding="utf-8")
+    pvac.write_text("method\tstatus\tjunction_id\tpeptide\tallele\taffinity_nm\tsource_file\npvacsplice\tnot_run: no VCF\t\t\t\t\t\n", encoding="utf-8")
+    run("consensus.py", primary, snaf, pvac, consensus)
+    assert rows(consensus)[0]["cross_validated"] == "yes"
+    run("render_report.py", consensus, DATA / "junction_counts.tsv", snaf, pvac, report,
+        "--metadata-json", DATA / "report.json")
+    rendered = report.read_text(encoding="utf-8")
+    assert "iPepGen scNeo candidate report" in rendered
+    assert "AAAAAAAA" in rendered

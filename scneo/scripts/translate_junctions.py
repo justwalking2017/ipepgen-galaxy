@@ -42,7 +42,9 @@ def main() -> None:
             joined = joined.reverse_complement()
             boundary_nt = len(right)
         for frame in range(3):
-            protein = str(joined[frame:].translate())
+            coding = joined[frame:]
+            coding = coding[:len(coding) - (len(coding) % 3)]
+            protein = str(coding.translate())
             boundary_aa = (boundary_nt - frame) // 3
             for length in lengths:
                 for start in range(max(0, boundary_aa - length + 1), min(boundary_aa, len(protein) - length) + 1):

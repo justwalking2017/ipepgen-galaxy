@@ -8,10 +8,16 @@ P = config["parameters"]
 C = config.get("containers", {})
 HELPERS = C.get("helpers")
 PREDICTOR = C.get("predictor", HELPERS)
+V = config.get("validation", {})
+SNAF = V.get("snaf", {})
+PVAC = V.get("pvacsplice", {})
+REPORT = config.get("report", {})
 
 
 rule all:
-    input: f"{OUT}/04-prediction/prioritized.tsv"
+    input:
+        f"{OUT}/05-consensus/consensus.tsv",
+        f"{OUT}/06-report/neoantigen-report.html"
 
 
 rule tumor_specific_junctions:
@@ -59,3 +65,55 @@ rule predict_hla_presentation:
     shell:
         "python scneo/scripts/predict_mhc.py {input.candidates:q} {input.alleles:q} {output:q} "
         "--backend {P[prediction_backend]:q} --max-affinity {P[max_affinity_nm]}"
+
+
+if SNAF.get("enabled", False):
+    rule snaf_evidence:
+        input: SNAF["result_tsv"]
+        output: f"{OUT}/05-consensus/snaf.tsv"
+        container: HELPERS
+        shell: "python scneo/scripts/normalize_validation.py snaf {input:q} {output:q}"
+else:
+    rule snaf_evidence:
+        output: f"{OUT}/05-consensus/snaf.tsv"
+        container: HELPERS
+        params: reason=SNAF.get("reason", "SNAF-compatible AltAnalyze matrix/reference database not supplied")
+        shell: "python scneo/scripts/normalize_validation.py snaf /dev/null {output:q} --disabled-reason {params.reason:q}"
+
+
+if PVAC.get("enabled", False):
+    rule pvacsplice_evidence:
+        input: PVAC["result_tsv"]
+        output: f"{OUT}/05-consensus/pvacsplice.tsv"
+        container: HELPERS
+        shell: "python scneo/scripts/normalize_validation.py pvacsplice {input:q} {output:q}"
+else:
+    rule pvacsplice_evidence:
+        output: f"{OUT}/05-consensus/pvacsplice.tsv"
+        container: HELPERS
+        params: reason=PVAC.get("reason", "matched VEP VCF/BAM/RegTools evidence not supplied")
+        shell: "python scneo/scripts/normalize_validation.py pvacsplice /dev/null {output:q} --disabled-reason {params.reason:q}"
+
+
+rule consensus:
+    input:
+        primary=rules.predict_hla_presentation.output,
+        snaf=rules.snaf_evidence.output,
+        pvac=rules.pvacsplice_evidence.output
+    output: f"{OUT}/05-consensus/consensus.tsv"
+    container: HELPERS
+    shell: "python scneo/scripts/consensus.py {input.primary:q} {input.snaf:q} {input.pvac:q} {output:q}"
+
+
+rule html_report:
+    input:
+        consensus=rules.consensus.output,
+        junctions=rules.tumor_specific_junctions.output,
+        snaf=rules.snaf_evidence.output,
+        pvac=rules.pvacsplice_evidence.output,
+        metadata=REPORT["metadata_json"]
+    output: f"{OUT}/06-report/neoantigen-report.html"
+    container: HELPERS
+    shell:
+        "python scneo/scripts/render_report.py {input.consensus:q} {input.junctions:q} {input.snaf:q} {input.pvac:q} "
+        "{output:q} --metadata-json {input.metadata:q}"
