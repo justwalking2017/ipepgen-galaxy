@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ipepgen-galaxy"
-version = "0.3.0"
-description = "Reproducible Galaxy workflow bundle and CLI for the iPepGen pipeline"
+version = "0.4.0"
+description = "Reproducible iPepGen workflows for Galaxy, HPC, and single-cell splice neoantigens"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -22,6 +22,7 @@ ipepgen = "ipepgen.cli:main"
 
 [project.optional-dependencies]
 workflow = ["snakemake>=9,<10", "snakemake-executor-plugin-slurm>=2,<3"]
+scneo = ["biopython>=1.85,<2"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}

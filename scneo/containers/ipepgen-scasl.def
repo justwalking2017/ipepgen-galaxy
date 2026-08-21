@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: continuumio/miniconda3:24.7.1-0
+
+%labels
+    org.opencontainers.image.title SCASL 1.0.0 for iPepGen scNeo
+    org.opencontainers.image.source https://github.com/xryanglab/SCASL
+    org.opencontainers.image.licenses Apache-2.0
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+    conda install -y -c conda-forge -c bioconda -c davidaknowles python=3.9 scikit-learn pandas pyyaml seaborn tqdm easydict umap-learn samtools r-leafcutter && conda clean -afy
+    git clone https://github.com/xryanglab/SCASL.git /opt/SCASL
+    cd /opt/SCASL && git checkout 1bf912435c08971b4124d6527aa3ffa31af199dc
+
+%environment
+    export PATH=/opt/SCASL:$PATH
+
+%runscript
+    cd /opt/SCASL
+    exec python main.py "$@"

@@ -1,0 +1,30 @@
+output_dir: scneo-results
+
+# SCASL's junc_matrix.csv can be converted to this long table shape:
+# junction_id, cell_id, count. Junction IDs are chrom:donor-acceptor:strand.
+inputs:
+  junction_counts: /project/mm/junction_counts.tsv
+  cell_metadata: /project/mm/cell_metadata.tsv
+  annotated_junctions: /references/gencode.v48.junctions.txt
+  genome_fasta: /references/GRCh38.primary_assembly.genome.fa
+  reference_proteome: /references/gencode.v48.pc_translations.fa
+  hla_alleles: /project/mm/hla.txt
+
+parameters:
+  min_tumor_cells: 3
+  min_tumor_reads: 5
+  max_normal_cells: 0
+  flank_nt: 90
+  peptide_lengths: "8,9,10,11"
+  prediction_backend: mhcflurry
+  max_affinity_nm: 500
+
+containers:
+  helpers: containers/ipepgen-scneo-helpers.sif
+  predictor: containers/ipepgen-scneo-mhcflurry.sif
+
+dataset:
+  study: "Single Cell Analysis of the Tumor Microenvironment Landscape Across the Disease Spectrum of Multiple Myeloma"
+  controlled_fastq: EGAD50000002519
+  public_expression_accessions: [GSE124310, GSE161801, GSE223060, GSE271107, GSE232988]
+  note: "Processed gene-expression matrices cannot recover splice junctions; use FASTQ/BAM/SJ.out.tab for discovery."

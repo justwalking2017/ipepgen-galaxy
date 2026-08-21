@@ -11,11 +11,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install -e ".[workflow]" pytest
+      - run: python -m pip install -e ".[workflow,scneo]" pytest
       - run: ipepgen validate
       - run: pytest -q
       - run: snakemake --snakefile workflow/Snakefile --configfile workflow/config/config.example.yaml --dry-run --cores 1
       - run: snakemake --snakefile hpc/Snakefile --configfile hpc/tests/config.yaml --dry-run --cores 2
-      - run: python -m compileall -q hpc/scripts
+      - run: snakemake --snakefile scneo/Snakefile --configfile scneo/tests/config.yaml --dry-run --cores 1
+      - run: snakemake --snakefile scneo/Snakefile --configfile scneo/tests/config.yaml --cores 1
+      - run: python -m compileall -q hpc/scripts scneo/scripts
       - run: docker build -t ipepgen-galaxy:test .
       - run: docker run --rm ipepgen-galaxy:test validate

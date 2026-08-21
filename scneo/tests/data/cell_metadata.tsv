@@ -1,0 +1,5 @@
+cell_id	compartment	cluster
+T1	tumor	plasma_1
+T2	tumor	plasma_1
+T3	tumor	plasma_2
+N1	normal	normal_plasma

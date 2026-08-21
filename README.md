@@ -1,6 +1,6 @@
-# iPepGen Galaxy workflow bundle
+# iPepGen reproducible workflows
 
-A reproducible bundle of the official Galaxy workflows described in the 2026 iPepGen paper, a command-line client, and a Snakemake DAG for remote execution on Galaxy.
+A reproducible bundle of the official Galaxy workflows described in the 2026 iPepGen paper, Galaxy-free HPC workflows, and a single-cell splice-derived neoantigen workflow.
 
 This repository does **not** reimplement the scientific algorithms or redistribute FragPipe components. The `.ga` files preserve the exact Galaxy tool versions and parameter mappings published by the authors. Full analysis runs on a Galaxy server with the referenced tools and sufficient compute.
 
@@ -67,6 +67,15 @@ snakemake --snakefile workflow/Snakefile --configfile config.yaml --cores 2
 See [`workflow/README.md`](workflow/README.md) for the DAG modes and configuration details.
 
 For a fully local HPC run with no Galaxy or BioBlend calls, use [`hpc/Snakefile`](hpc/Snakefile) and follow [`hpc/README.md`](hpc/README.md). FragPipe remains user-supplied because its academic/non-commercial license does not permit bundling it into the public release image.
+
+## Single-cell splice neoantigens
+
+Version 0.4 adds [`scneo/`](scneo/): a Galaxy-free Snakemake workflow that
+filters tumor-specific single-cell splice junctions, translates junction-spanning
+peptides, subtracts the reference proteome, and predicts patient-specific HLA-I
+presentation. It includes an optional pinned SCASL container, Apptainer definitions,
+a Slurm profile, and an executable synthetic smoke test. See
+[`scneo/README.md`](scneo/README.md) for required evidence and limitations.
 
 Pass credentials only at runtime:
 

@@ -1,0 +1,16 @@
+executor: slurm
+software-deployment-method: apptainer
+apptainer-args: "--bind /scratch,/project,/references"
+jobs: 100
+latency-wait: 120
+rerun-incomplete: true
+printshellcmds: true
+default-resources:
+  - mem_mb=8000
+  - runtime=60
+  - slurm_account="YOUR_ACCOUNT"
+  - slurm_partition="compute"
+set-resources:
+  predict_hla_presentation:
+    mem_mb: 32000
+    runtime: 240

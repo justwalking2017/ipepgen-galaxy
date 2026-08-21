@@ -1,0 +1,17 @@
+output_dir: scneo-test-results
+inputs:
+  junction_counts: scneo/tests/data/junction_counts.tsv
+  cell_metadata: scneo/tests/data/cell_metadata.tsv
+  annotated_junctions: scneo/tests/data/annotated.txt
+  genome_fasta: scneo/tests/data/genome.fa
+  reference_proteome: scneo/tests/data/proteome.fa
+  hla_alleles: scneo/tests/data/hla.txt
+parameters:
+  min_tumor_cells: 2
+  min_tumor_reads: 3
+  max_normal_cells: 0
+  flank_nt: 30
+  peptide_lengths: "8,9"
+  prediction_backend: mock
+  max_affinity_nm: 5000
+containers: {}
