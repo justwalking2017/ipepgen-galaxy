@@ -15,3 +15,12 @@ parameters:
   prediction_backend: mock
   max_affinity_nm: 5000
 containers: {}
+validation:
+  snaf:
+    enabled: false
+    reason: "test fixture has no SNAF reference database"
+  pvacsplice:
+    enabled: false
+    reason: "test fixture has no matched VCF/BAM"
+report:
+  metadata_json: scneo/tests/data/report.json

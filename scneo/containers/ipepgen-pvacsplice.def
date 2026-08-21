@@ -1,0 +1,9 @@
+Bootstrap: docker
+From: griffithlab/pvactools:7.1.1
+
+%labels
+    org.opencontainers.image.title pVACsplice 7.1.1 cross-validator for iPepGen scNeo
+    org.opencontainers.image.source https://pvactools.org
+
+%runscript
+    exec pvacsplice "$@"

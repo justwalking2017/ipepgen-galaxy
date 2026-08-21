@@ -77,6 +77,12 @@ presentation. It includes an optional pinned SCASL container, Apptainer definiti
 a Slurm profile, and an executable synthetic smoke test. See
 [`scneo/README.md`](scneo/README.md) for required evidence and limitations.
 
+Version 0.5 adds optional pVACsplice and SNAF validation branches, peptide-level
+consensus ranking, and a self-contained HTML report. A real-data chromosome 22
+pilot from GSE118389/PT089 is included under
+[`reports/GSE118389-PT089/`](reports/GSE118389-PT089/). The pilot uses MHCflurry
+but assumed common HLA alleles because patient HLA typing was unavailable.
+
 Pass credentials only at runtime:
 
 ```bash

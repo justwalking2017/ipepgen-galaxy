@@ -1,0 +1,8 @@
+{
+  "dataset": "Synthetic CI fixture",
+  "sample": "TEST",
+  "source_url": "https://example.org/fixture",
+  "accession": "TEST",
+  "genome": "synthetic",
+  "prediction_note": "mock backend; non-scientific"
+}

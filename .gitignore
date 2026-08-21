@@ -3,6 +3,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 .venv-scneo/
+.venv-mhc/
 dist/
 build/
 *.egg-info/
@@ -14,5 +15,8 @@ hpc-results/
 scneo-results/
 scneo-test-results/
 .test-tmp/
+.test-tmp-*/
+.report-work/
+.scasl-source/
 paper.xml
 fragpipe.ga
