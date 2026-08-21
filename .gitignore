@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+.venv-scneo/
 dist/
 build/
 *.egg-info/
@@ -10,5 +11,8 @@ results/
 *.sif
 vendor/
 hpc-results/
+scneo-results/
+scneo-test-results/
+.test-tmp/
 paper.xml
 fragpipe.ga

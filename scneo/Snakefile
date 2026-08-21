@@ -1,0 +1,61 @@
+from snakemake.utils import min_version
+
+min_version("9.0")
+
+OUT = config.get("output_dir", "scneo-results")
+I = config["inputs"]
+P = config["parameters"]
+C = config.get("containers", {})
+HELPERS = C.get("helpers")
+PREDICTOR = C.get("predictor", HELPERS)
+
+
+rule all:
+    input: f"{OUT}/04-prediction/prioritized.tsv"
+
+
+rule tumor_specific_junctions:
+    input:
+        counts=I["junction_counts"],
+        metadata=I["cell_metadata"],
+        annotated=I["annotated_junctions"]
+    output: f"{OUT}/01-junctions/tumor-specific.tsv"
+    container: HELPERS
+    shell:
+        "python scneo/scripts/filter_junctions.py {input.counts:q} {input.metadata:q} {output:q} "
+        "--annotated {input.annotated:q} --min-tumor-cells {P[min_tumor_cells]} --min-tumor-reads {P[min_tumor_reads]} "
+        "--max-normal-cells {P[max_normal_cells]}"
+
+
+rule translate_junctions:
+    input:
+        junctions=rules.tumor_specific_junctions.output,
+        genome=I["genome_fasta"]
+    output:
+        tsv=f"{OUT}/02-translation/candidates.tsv",
+        fasta=f"{OUT}/02-translation/candidates.fasta"
+    container: HELPERS
+    shell:
+        "python scneo/scripts/translate_junctions.py {input.junctions:q} {input.genome:q} {output.tsv:q} {output.fasta:q} "
+        "--flank-nt {P[flank_nt]} --lengths {P[peptide_lengths]:q}"
+
+
+rule filter_reference_proteome:
+    input:
+        candidates=rules.translate_junctions.output.tsv,
+        proteome=I["reference_proteome"]
+    output: f"{OUT}/03-self-filter/novel-peptides.tsv"
+    container: HELPERS
+    shell:
+        "python scneo/scripts/filter_self.py {input.candidates:q} {input.proteome:q} {output:q}"
+
+
+rule predict_hla_presentation:
+    input:
+        candidates=rules.filter_reference_proteome.output,
+        alleles=I["hla_alleles"]
+    output: f"{OUT}/04-prediction/prioritized.tsv"
+    container: PREDICTOR
+    shell:
+        "python scneo/scripts/predict_mhc.py {input.candidates:q} {input.alleles:q} {output:q} "
+        "--backend {P[prediction_backend]:q} --max-affinity {P[max_affinity_nm]}"

@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: python:3.11-slim
+
+%labels
+    org.opencontainers.image.title iPepGen scNeo MHCflurry predictor
+    org.opencontainers.image.licenses Apache-2.0
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends gcc g++ && rm -rf /var/lib/apt/lists/*
+    python -m pip install --no-cache-dir biopython==1.85 mhcflurry==2.1.4
+    mhcflurry-downloads fetch models_class1_presentation
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
