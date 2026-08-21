@@ -18,14 +18,12 @@ rule tumor_specific_junctions:
     input:
         counts=I["junction_counts"],
         metadata=I["cell_metadata"],
-        annotated=I.get("annotated_junctions", [])
+        annotated=I["annotated_junctions"]
     output: f"{OUT}/01-junctions/tumor-specific.tsv"
     container: HELPERS
-    params:
-        annotated=lambda w, input: f"--annotated {input.annotated:q}" if input.annotated else ""
     shell:
         "python scneo/scripts/filter_junctions.py {input.counts:q} {input.metadata:q} {output:q} "
-        "{params.annotated} --min-tumor-cells {P[min_tumor_cells]} --min-tumor-reads {P[min_tumor_reads]} "
+        "--annotated {input.annotated:q} --min-tumor-cells {P[min_tumor_cells]} --min-tumor-reads {P[min_tumor_reads]} "
         "--max-normal-cells {P[max_normal_cells]}"
 
 
